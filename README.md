@@ -1,6 +1,6 @@
 # Racket Commons
 
-A collection of libraries for Racket.
+A collection of useful procedures divided into modules for Racket.
 
 ## Commons procedures
 
