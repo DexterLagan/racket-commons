@@ -49,7 +49,7 @@
          all-but-last                    ; (all-but-last l)
          filter-zip                      ; (filter-zip pred-lst lst)
          string->label                   ; (string->label s)
-         )
+         transpose)                      ; (transpose l)
          
 (module+ test
   (require rackunit))
