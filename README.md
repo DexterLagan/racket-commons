@@ -52,7 +52,8 @@ A collection of useful procedures divided into modules for Racket.
          swap-columns-and-rows           ; (swap-columns-and-rows l)
          swap-columns-to-rows-vector     ; (swap-columns-to-rows-vector v)
          all-but-last                    ; (all-but-last l)
-         filter-zip)                     ; (filter-zip pred-lst lst)
+         filter-zip                      ; (filter-zip pred-lst lst)
+         string->label)                  ; (string->label s)
 </pre>
 
 ## IO procedures
