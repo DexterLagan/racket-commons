@@ -128,6 +128,7 @@ A collection of useful procedures divided into modules for Racket.
 
 ## Menu-bar procedures
 
+This is intended to be a good copy-paste candidate when one needs a simple, standard-looking menu bar.
 <pre>
 (provide menu-bar
          ------------------------
