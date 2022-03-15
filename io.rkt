@@ -24,6 +24,7 @@
          get-filenames                 ; (get-filenames filenames-w-ext)
          get-file-name                 ; (get-file-name path)
          get-last-path-part            ; (get-last-path-part path)
+         list->file                    ; (list->file l file)
          make-backup-file              ; (make-backup-file path)
          maybe-copy-file               ; (maybe-copy-file source destination error-message exists-ok?)
          move-or-die                   ; (move-or-die src dest)
@@ -338,5 +339,9 @@
     (with-handlers ([exn:fail:filesystem? (λ (e) (show-error-message error-message))])
       (when (and exists-ok? (file-exists? destination)) (delete-file destination)) ; Racket bugfix
       (copy-file source destination exists-ok?))))
+
+;; write a list to file as is
+(define (list->file l file)
+  (write-to-file l file #:exists 'replace #:mode 'text))
 
 ; EOF
