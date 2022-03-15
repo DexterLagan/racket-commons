@@ -153,12 +153,12 @@ This is intended to be a good copy-paste candidate when one needs a simple, stan
 <pre>
 (provide query-execute                                 ; (query-execute db query)
          query-record                                  ; (query-record db query)
-         query-value                                   ; (query-value db query)
          query-string                                  ; (query-string db query)
          get-query-headers                             ; (get-query-headers query)    ('AS' required)
          get-query-headers#                            ; (get-query-headers# query)    ('AS' not required, ignores subqueries)
          get-query-headers*                            ; (get-query-headers* db query)      ('AS' not required, but does not support complex sub-queries)
          get-query-results                             ; (get-query-results db query wildcard-list)
+         list->file                                    ; (list->file l file)
          ml->sl                                        ; (ml->sl l)
          sql-ml->sl                                    ; (sql-ml->sl l)
          get-tables                                    ; (get-tables db)
