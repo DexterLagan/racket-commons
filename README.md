@@ -72,6 +72,7 @@ A collection of libraries for Racket.
          get-file-name                 ; (get-file-name path)
          get-last-path-part            ; (get-last-path-part path)
          make-backup-file              ; (make-backup-file path)
+         maybe-copy-file               ; (maybe-copy-file source destination error-message exists-ok?)
          move-or-die                   ; (move-or-die src dest)
          path!                         ; (path! path-or-string)
          path&lt?                        ; (path&lt? p1 p2)
