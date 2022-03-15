@@ -93,6 +93,7 @@ A collection of libraries for Racket.
          get-single-directory        ; (get-single-directory title msg path)
          hide-loading                ; (hide-loading)
          listbox-dialog              ; (listbox-dialog title message initial-listbox-contents style)
+         listbox-dialog#             ; (listbox-dialog# title message headers initial-listbox-contents selection-type width height)
          listbox-selectall           ; (listbox-selectall list-box item-count select?)
          my-get-file-list            ; (my-get-file-list message path filetype_name filetype_pattern)
          msgbox                      ; (msgbox appname message)
