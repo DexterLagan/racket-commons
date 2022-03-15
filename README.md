@@ -88,19 +88,21 @@ A collection of libraries for Racket.
 
 <pre>
 (provide die                         ; (die msg)
+         die#                        ; (die# msg)
          get-directory-list          ; (get-directory-list title msg path)
          get-directory-list-w-prefix ; (get-directory-list-w-prefix title msg path folder_prefix)
          get-single-directory        ; (get-single-directory title msg path)
+         get-string-or-die           ; (get-string-or-die msg error)
          hide-loading                ; (hide-loading)
          listbox-dialog              ; (listbox-dialog title message initial-listbox-contents style)
          listbox-dialog#             ; (listbox-dialog# title message headers initial-listbox-contents selection-type width height)
          listbox-selectall           ; (listbox-selectall list-box item-count select?)
          my-get-file-list            ; (my-get-file-list message path filetype_name filetype_pattern)
-         msgbox                      ; (msgbox appname message)
+         msgbox                      ; (msgbox message)
          populate-listbox            ; (populate-listbox listbox listbox-contents)
          show-error-message          ; (show-error-message message)
          show-loading                ; (show-loading)
-         show-confirmation-dialog    ; (show-confirmation-dialog appname message)
+         show-confirmation-dialog    ; (show-confirmation-dialog message)
          show-warning-message)       ; (show-warning-message message)
 </pre>
 
