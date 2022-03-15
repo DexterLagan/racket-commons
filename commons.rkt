@@ -12,6 +12,8 @@
          currym                          ; ((currym func param1 param3) param2) (func param1 param2 param3)
          curry-ref                       ; (curry-ref id params ref)
          get-matching-seconds            ; (get-matching-seconds lst key)
+         grep                            ; (grep lines regex-pattern)
+         grepl                           ; (grep lines prefix)
          string-replace-list             ; (string-replace-list source pattern-list destination)
          multi-replace-line              ; (multi-replace-line line source-list destination)
          multi-replace-lines             ; (multi-replace-lines lines source-list destination)
@@ -31,6 +33,9 @@
          take-everything-after-including ; (take-everything-after-including l starts-with)
          get-clipboard-text              ; (get-clipboard-text)
          set-clipboard-text              ; (set-clipboard-text s)
+         get-unique-prefix-line          ; (get-unique-prefix-line lst prefix)
+         label->filename                 ; (label->filename label ext)
+         execute-async                   ; (execute-async startup-path program-binary-path command-line-parameters)
          combine-with)                   ; (combine-with f l1 l2)
 
 (module+ test
@@ -331,6 +336,50 @@
 ;; returns all the lines after the line that starts with given prefix
 (define (take-everything-after-including l starts-with)
   (dropf l (λ (s) (not (string-prefix? s starts-with)))))
-  
+
+;; returns the matching unique line starting with prefix
+;; ensures a single element line exists in the list
+;; ensures the prefix exists
+;; returns false otherwise
+(define (get-unique-prefix-line lst prefix)
+  (if (not (list? lst)) #f
+      (let ((bin-line (grepl lst prefix)))
+        (if (and (list? bin-line)
+                 (= (length bin-line) 1))
+            (string-replace (first bin-line) prefix "")
+            #f))))
+
+;; generate a filename from a title
+;; i.e. The Lion Guard --> the-lion-guard
+(define (label->filename label ext)
+  (string-append
+   (string-downcase
+    (string-replace label " " "-"))
+   ext))
+
+;; grep using a regex
+(define (grep lines regex-pattern)
+  (filter (λ (line) (regexp-match? regex-pattern line)) lines))
+
+;; grep using a prefix only
+(define (grepl lines prefix)
+  (filter (λ (line) (string-prefix? line prefix)) lines))
+
+;;; system
+
+;; launches a program in a cross-platform way
+(define (execute-async startup-path program-binary-path command-line-parameters)
+  (if (and (non-empty-string? startup-path)
+           (non-empty-string? program-binary-path)
+           (file-exists? program-binary-path))
+      (if (equal? (system-type 'os) 'windows)
+          (shell-execute #f
+                         program-binary-path
+                         command-line-parameters
+                         startup-path
+                         'sw_shownormal) ; possible values: 'sw_shownormal 'sw_hide 'sw_minimize
+          (process program-binary-path))
+      (show-error-message "This program is not installed.")))
+
 
 ; EOF
