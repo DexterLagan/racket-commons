@@ -35,6 +35,7 @@
          set-clipboard-text              ; (set-clipboard-text s)
          get-unique-prefix-line          ; (get-unique-prefix-line lst prefix)
          label->filename                 ; (label->filename label ext)
+         str-list-contains?              ; (str-list-contains? l s)
          execute-async                   ; (execute-async startup-path program-binary-path command-line-parameters)
          combine-with)                   ; (combine-with f l1 l2)
 
@@ -177,10 +178,17 @@
   (check-equal? (list-of-one? '(1 2)) #f)
   (check-equal? (list-of-one? 'test) #f))
 
-;; predicate returns true if list is non-empty
+;; returns true if a list is not empty, false otherwise
 (define (non-empty-list? l)
-  (and (list? l)
-       (not (null? l))))
+  (if (list? l)
+      (not (empty? l))
+      #f))
+; unit test
+(module+ test
+  (check-false (non-empty-list? #f))
+  (check-false (non-empty-list? '()))
+  (check-true (non-empty-list? '(1 2)))
+  (check-true (non-empty-list? '("a" "b" "c"))))
 
 ;; predicate returns true if all lists given are non-empty and of equal length
 (define non-empty-same-length?
@@ -364,6 +372,24 @@
 ;; grep using a prefix only
 (define (grepl lines prefix)
   (filter (λ (line) (string-prefix? line prefix)) lines))
+
+;; transpose a list of lists
+(define (transpose l)
+  (apply map list l))
+; unit test
+(module+ test
+  (check-equal? (apply map list '((1 2 3) (4 5 6)))
+                '((1 4) (2 5) (3 6))))
+
+;; searches a string in a list. Returns #t if found, #f otherwise
+(define (str-list-contains? l s)
+  (ormap (λ (search)
+           (string-contains? search s))
+         l))
+; unit test
+(module+ test
+  (check-true (str-list-contains? '("a" "b" "c") "b"))
+  (check-false (str-list-contains? '("a" "b" "c") "e")))
 
 ;;; system
 
