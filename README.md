@@ -102,6 +102,14 @@ A collection of libraries for Racket.
          show-warning-message)       ; (show-warning-message message)
 </pre>
 
+## GUI Contents
+
+<pre>
+(provide get-bitmap               ; (get-bitmap filename width height)
+         is-checked?              ; (is-checked? check-box)
+         make-elastic-frame)      ; (make-elastic-frame appname)
+</pre>
+
 ## XML Contents
 
 <pre>
