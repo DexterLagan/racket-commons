@@ -133,6 +133,34 @@ A collection of useful procedures divided into modules for Racket.
          help-about)
 </pre>
 
+## SQL procedures
+
+<pre>
+(provide query-execute                                 ; (query-execute db query)
+         query-record                                  ; (query-record db query)
+         query-value                                   ; (query-value db query)
+         query-string                                  ; (query-string db query)
+         get-query-headers                             ; (get-query-headers query)    ('AS' required)
+         get-query-headers#                            ; (get-query-headers# query)    ('AS' not required, ignores subqueries)
+         get-query-headers*                            ; (get-query-headers* db query)      ('AS' not required, but does not support complex sub-queries)
+         get-query-results                             ; (get-query-results db query wildcard-list)
+         ml->sl                                        ; (ml->sl l)
+         sql-ml->sl                                    ; (sql-ml->sl l)
+         get-tables                                    ; (get-tables db)
+         get-tables*                                   ; (get-tables* db-schema)
+         get-table-columns                             ; (get-table-columns db table)
+         get-table-columns-and-types                   ; (get-table-columns-and-types db table)
+         get-db-schema                                 ; (get-db-schema db tables)
+         make-select-query                             ; (make-select-query db table columns)
+         table-contains?                               ; (table-contains? db column table)
+         which-tables-contain?                         ; (which-tables-contain? db tables column)
+         which-tables-contain?*                        ; (which-tables-contain?* db-schema column)
+         write-db-schema-to-file                       ; (write-db-schema-to-file db tables file)
+         read-db-schema-from-file                      ; (read-db-schema-from-file file)
+         update-db-schema                              ; (update-db-schema db db-schema)
+         get-tables-that-contain-each-column-in-query) ; (get-tables-that-contain-each-column-in-query db db-schema query)
+</pre>
+
 ## Hash procedures
 
 <pre>
