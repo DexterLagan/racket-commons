@@ -25,6 +25,7 @@
          get-file-name                 ; (get-file-name path)
          get-last-path-part            ; (get-last-path-part path)
          make-backup-file              ; (make-backup-file path)
+         maybe-copy-file               ; (maybe-copy-file source destination error-message exists-ok?)
          move-or-die                   ; (move-or-die src dest)
          path!                         ; (path! path-or-string)
          path<?                        ; (path<? p1 p2)
@@ -330,5 +331,12 @@
        (not (null? paths))
        (andmap folder-path? paths)))
 
+;; attempts to cleanly copy a file with exception handling
+;; displays an error if copy fails
+(define (maybe-copy-file source destination error-message exists-ok?)
+  (when (and (non-empty-string? source) (file-exists? source))
+    (with-handlers ([exn:fail:filesystem? (λ (e) (show-error-message error-message))])
+      (when (and exists-ok? (file-exists? destination)) (delete-file destination)) ; Racket bugfix
+      (copy-file source destination exists-ok?))))
 
 ; EOF
