@@ -110,6 +110,25 @@ A collection of libraries for Racket.
          make-elastic-frame)      ; (make-elastic-frame appname)
 </pre>
 
+## Menu-bar Contents
+
+<pre>
+(provide menu-bar
+         ------------------------
+         file-menu
+         file-new
+         file-open
+         file-save
+         file-save-as
+         file-exit
+         edit-menu
+         edit-copy
+         edit-paste
+         edit-select-all
+         help-menu
+         help-about)
+</pre>
+
 ## XML Contents
 
 <pre>
