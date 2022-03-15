@@ -1,6 +1,7 @@
 #lang racket/gui
 (require mrlib/path-dialog)
-(provide die                         ; (die msg)
+(provide centered-listbox-dialog     ; (centered-listbox-dialog title message initial-listbox-contents style width-ratio height-ratio)
+         die                         ; (die msg)
          die#                        ; (die# msg)
          get-directory-list          ; (get-directory-list title msg path)
          get-directory-list-w-prefix ; (get-directory-list-w-prefix title msg path folder_prefix)
@@ -429,6 +430,91 @@
 ;  (list "Dude" "Naice"))
 ;  'multiple 480 640)
 
+; Display a generic, centered dialog using the width and height ratios (2 by default)
+(define (centered-listbox-dialog title message initial-listbox-contents style width-ratio height-ratio)
+  (let* ((dialog (let*-values ([(display-width display-height) (get-display-size)]
+                               [(dialog-width) (round (/ display-width width-ratio))]
+                               [(dialog-height) (round (/ display-height height-ratio))])
+                   (new dialog%
+                        [label title]
+                        [x (- (round (/ display-width 2)) (round (/ dialog-width 2)))]
+                        [y (- (round (/ display-height 2)) (round (/ dialog-height 2)))]
+                        [width dialog-width]
+                        [height dialog-height])))
 
+         ; Control defs
+         (top-panel (new vertical-panel% [parent dialog]
+                         [alignment '(center center)]))
+         
+         (new-message (new message% [parent top-panel]
+                           [label message]))
+         
+         (new-listbox (new list-box%
+                           [label #f]
+                           [choices initial-listbox-contents]
+                           [parent top-panel]
+                           [style (list style)]))
+
+         (bottom-panel (new horizontal-panel%
+                            [parent dialog]
+                            [alignment '(center bottom)]
+                            [stretchable-height #f]))
+         
+         (bottom-left-panel (new horizontal-panel%
+                                 [parent bottom-panel]
+                                 [alignment '(left bottom)]))
+
+         (bottom-right-panel (new horizontal-panel%
+                                  [parent bottom-panel]
+                                  [alignment '(right bottom)]))
+
+         ; Currenr listbox contents
+         (current-listbox-contents initial-listbox-contents)
+         (current-selected-contents null)
+         
+         ; Callbacks
+         (selectall-button-callback (lambda (b e) (listbox-selectall new-listbox (length current-listbox-contents) #t)))
+
+         (cancel-button-callback (lambda (b e) (begin
+                                                 (set! current-selected-contents #f)
+                                                 (send dialog show #f))))
+
+         (ok-button-callback (lambda (b e) (let* ((current-listbox-selection (send new-listbox get-selections))
+                                                  (selected-contents (map (curry list-ref current-listbox-contents) current-listbox-selection)))
+                                             (begin
+                                               (set! current-selected-contents selected-contents)
+                                               (send dialog show #f)))))
+
+         (filter-textfield-callback (lambda (t e) (let ((new-listbox-contents (filter (curryr string-contains? (send t get-value)) initial-listbox-contents)))
+                                                    (begin
+                                                      (set! current-listbox-contents new-listbox-contents)
+                                                      (populate-listbox new-listbox new-listbox-contents)))))
+
+         ; Buttons defs
+         (filter-textfield (new text-field%
+                                [label "Filter: "]
+                                [parent bottom-left-panel]
+                                [callback filter-textfield-callback]))
+
+         (selectall-button (new button%
+                                [label "Select All"]
+                                [enabled (if (equal? style 'single) #f #t)] ; Enable or disable the Select All button depending on global style
+                                [parent bottom-left-panel]
+                                [callback selectall-button-callback]))
+         
+         (cancel-button (new button%
+                             [label "Cancel"]
+                             [parent bottom-right-panel]
+                             [callback cancel-button-callback]))
+         
+         (ok-button (new button%
+                         [label "OK"]
+                         [parent bottom-right-panel]
+                         [callback ok-button-callback])))
+    (begin
+      (send dialog show #t)
+      current-selected-contents))) ; Return list of selected items (null if cancel pressed)
+; unit test
+;(centered-listbox-dialog "Title" "Message" '("Sweet" "Dude" "Naice") 'single 3 1)
 
 ; EOF
