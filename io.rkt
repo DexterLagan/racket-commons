@@ -3,12 +3,18 @@
 (provide add-file-extension            ; (add-file-extension filename extension)
          add-file-extensions           ; (add-file-extensions filenames extension)
          copy-file-to-folders          ; (copy-file-to-folders source-path destination-list overwrite?)
+         copy-or-die                   ; (copy-or-die src dest)
+         create-folders-or-die         ; (create-folders-or-die paths)
          create-list-of-files          ; (create-list-of-files filenames content)
          directories-exist?            ; (directories-exist? list-of-dirs)
          directory-list-str            ; (directory-list-str path)
          display-error-count           ; (display-error-count result msg)
          filename-path->string         ; (filename-path->string filename-path)
          find-files#                   ; (find-files# pred path)
+         file-path?                    ; (file-path? path)
+         file-paths?                   ; (file-paths? paths)
+         folder-path?                  ; (folder-path? path)
+         folder-paths?                 ; (folder-paths? paths)
          get-error-count               ; (get-error-count result msg)
          get-file-extension            ; (get-file-extension filename-path)
          get-file-extensions           ; (get-file-extensions filenames)
@@ -16,12 +22,16 @@
          get-file-list-from-prefix-ext ; (get-file-list-from-prefix-ext path prefix extension)
          get-filename                  ; (get-filename filename-w-ext)
          get-filenames                 ; (get-filenames filenames-w-ext)
+         get-file-name                 ; (get-file-name path)
          get-last-path-part            ; (get-last-path-part path)
          make-backup-file              ; (make-backup-file path)
+         move-or-die                   ; (move-or-die src dest)
          path!                         ; (path! path-or-string)
+         path<?                        ; (path<? p1 p2)
          process-text-files            ; (process-text-files process file-list)
          replace-filename-in-path      ; (replace-filename-in-path full-path new-filename)
          run-if-not-exists             ; (run-if-not-exists list-of-files operation)
+         sort-paths                    ; (sort-paths paths)
          write-file-lines)             ; (write-file-lines lines path)
 (module+ test
   (require rackunit))
@@ -34,7 +44,9 @@
 
 ; v1.0 - initial release for Overrider
 ; v1.1 - for TextureFixer
-; v1.2 - this version, for frame-copier. Added find-files#, directory-list-str
+; v1.2 - added find-files#, directory-list-str
+; v1.3 - added file-path?, file-paths?, folder-path?, folder-paths?, copy-or-die, move-or-die
+;        create-folders-or-die, get-file-name, path<?, sort-paths.
 
 ;;; defs
          
@@ -79,6 +91,8 @@
   (if (not (file-exists? (first list-of-files)))
       (operation)
       (display "Files already exist. Skipping...\n")))
+; unit test
+; (run-if-not-exists list-of-files (create-list-of-files list-of-files file-lines))
 
 ;; Displays a file operation's error count with custom message from its result.
 (define (get-error-count result msg)
@@ -247,7 +261,6 @@
           (andmap directory-exists? l)
           #f)
       #f))
-  
    
 ;; replace a filename in a full path with another filename
 (define (replace-filename-in-path full-path new-filename)
@@ -258,5 +271,64 @@
                 "C:\\test\\path\\package-name"
                 "get-package-path-string"))
                 
-           
+;; returns the name of a folder from its path as string
+(define (get-file-name path)
+  (path->string (last (explode-path path))))
+
+;; helper function to sort paths - converts two paths to a string and compare them
+(define (path<? p1 p2)
+  (if (and (path? p1) (path? p2))
+      (string<? (path->string p1) (path->string p2))
+      #f))
+
+;; sort a list of paths alphabetically
+(define (sort-paths paths)
+  (if (andmap path? paths)
+      (sort paths path<?)
+      null))
+
+;; create folders automatically from a list, with support for exceptions
+(define (create-folders-or-die paths)
+  (with-handlers ([exn:fail:filesystem? (λ (e) (begin (show-error-message "Unable to create directory structure. Access denied. Aborting.  ")
+                                                      (exit)))])
+    (for-each make-directory* paths)))
+
+;; copies a file or folder to destination or die, with support for exceptions and copying a list of paths
+(define (copy-or-die src dest)
+  (with-handlers ([exn:fail:filesystem? (λ (e) (begin (show-error-message "Unable to copy file/directory. Already exists? Aborting.  ")
+                                                      (exit)))])
+    (if (list? src) (for-each (λ (this-src) (copy-directory/files this-src (build-path dest (get-file-name this-src)))) src)     ; if src is a list of paths, copy them all to destination
+        (copy-directory/files src (build-path dest (get-file-name src))))))                                               ; else copy src to dest as usual.
+
+;; moves a file or folder to destination or die, with support for exceptions and copying a list of paths
+(define (move-or-die src dest)
+  (with-handlers ([exn:fail:filesystem? (λ (e) (begin (show-error-message "Unable to move file/directory. Already exists? Aborting.  ")
+                                                      (exit)))])
+    (if (list? src) (for-each (λ (this-src) (rename-file-or-directory this-src (build-path dest (get-file-name this-src)))) src)     ; if src is a list of paths, copy them all to destination
+        (rename-file-or-directory src (build-path dest (get-file-name src))))))                                               ; else copy src to dest as usual.
+
+;; predicate returns true if argument is a path and points to an existing file.
+(define (file-path? path)
+  (and (path? path)
+       (file-exists? path)))
+
+;; predicate returns true if argument is a list of paths which point to existing files.
+(define (file-paths? paths)
+  (and (list? paths)
+       (not (null? paths))
+       (andmap file-path? paths)))
+
+;; predicate returns true if argument is a path and points to an existing folder - supports paths and path-strings
+(define (folder-path? path)
+  (and (or (path? path)
+           (non-empty-string? path))
+       (directory-exists? (if (path? path) path (string->path path)))))
+
+;; predicate returns true if argument is a list of paths which point to existing files.
+(define (folder-paths? paths)
+  (and (list? paths)
+       (not (null? paths))
+       (andmap folder-path? paths)))
+
+
 ; EOF
