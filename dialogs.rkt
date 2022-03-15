@@ -6,6 +6,7 @@
          get-single-directory        ; (get-single-directory title msg path)
          hide-loading                ; (hide-loading)
          listbox-dialog              ; (listbox-dialog title message initial-listbox-contents style)
+         listbox-dialog#             ; (listbox-dialog# title message headers initial-listbox-contents selection-type width height)
          listbox-selectall           ; (listbox-selectall list-box item-count select?)
          my-get-file-list            ; (my-get-file-list message path filetype_name filetype_pattern)
          msgbox                      ; (msgbox appname message)
@@ -255,10 +256,153 @@
       current-selected-contents))) ; Return list of selected items (null if cancel pressed)
 
 ; Unit test
-;(listbox-dialog "Mercury PaletteCopier"
+;(listbox-dialog "PaletteCopier"
 ;                "Please select destination elements:"
 ;                (list "Naice" "Sweet" "Dude")
 ;                'multiple)
+
+;; List-box dialog with 'select all', name filter and support for columns
+;; Returns list of selected items, null otherwise
+;; initial-listbox-contents is a list of columns
+(define (listbox-dialog# title message headers initial-listbox-contents selection-type width height)
+  (let* ((dialog (new dialog%
+                      [label title]
+                      [parent #f]
+                      [border 10]
+                      [spacing 10]
+                      [style (list 'resize-border)]
+                      [width width]
+                      [height height]
+                      [min-width width]
+                      [min-height height]))
+         ;[stretchable-width #f]
+         ;[stretchable-height #f]
+
+         ; Currenr listbox contents
+         (current-listbox-contents initial-listbox-contents)
+         (current-selected-contents null)
+         
+         ; Control defs
+         (top-panel (new vertical-panel% [parent dialog]
+                         [alignment '(center center)]))
+         
+         (new-message (new message% [parent top-panel]
+                           [label message]))
+         
+         (new-listbox (new list-box%
+                           [label #f]
+                           [columns headers]
+                           [choices '()]
+                           [parent top-panel]
+                           [style (cons selection-type
+                                        '(variable-columns
+                                          clickable-headers
+                                          column-headers
+                                          reorderable-headers))]
+                           [callback
+                            (lambda (l e)
+                              (let ((event-type (send e get-event-type)))
+                                (if (equal? event-type 'list-box-dclick)
+                                    (let* ((current-listbox-selection (send l get-selections))
+                                           (selected-contents (map (curry list-ref current-listbox-contents)
+                                                                   current-listbox-selection)))
+                                      (begin
+                                        (set! current-selected-contents selected-contents)
+                                        (send dialog show #f)))
+                                    null)))]))
+                                       
+         (bottom-panel
+          (new horizontal-panel%
+               [parent dialog]
+               [alignment '(center bottom)]
+               [stretchable-height #f]))
+         
+         (bottom-left-panel
+          (new horizontal-panel%
+               [parent bottom-panel]
+               [alignment '(left bottom)]))
+
+         (bottom-right-panel
+          (new horizontal-panel%
+               [parent bottom-panel]
+               [alignment '(right bottom)]))
+         
+         ; Callbacks
+         (selectall-button-callback
+          (lambda (b e)
+            (listbox-selectall new-listbox (length current-listbox-contents) #t)))
+
+         (cancel-button-callback
+          (lambda (b e)
+            (begin
+              (set! current-selected-contents #f)
+              (send dialog show #f))))
+
+         (ok-button-callback
+          (lambda (b e)
+            (let* ((current-listbox-selection (send new-listbox get-selections))
+                   (selected-contents
+                    (map (curry list-ref current-listbox-contents)
+                         current-listbox-selection)))
+              (begin
+                (set! current-selected-contents selected-contents)
+                (send dialog show #f)))))
+       
+         (filter-textfield-callback
+          (lambda (t e)
+            ; grab user input in text field
+            (define search-str
+              (send t get-value))
+            ; utility func to find out if a list contains a string anywhere
+            (define (str-list-contains? l)
+              (ormap (λ (s)
+                       (string-contains? s search-str))
+                     l))
+            ; filter list and re-populate listbox
+            (let ((new-listbox-contents
+                   (filter str-list-contains? initial-listbox-contents)))
+              (begin
+                (set! current-listbox-contents new-listbox-contents)
+                (populate-listbox# new-listbox new-listbox-contents)))))
+
+         ; Buttons defs
+         (filter-textfield
+          (new text-field%
+               [label "Filter: "]
+               [parent bottom-left-panel]
+               [callback filter-textfield-callback]))
+
+         (selectall-button
+          (new button%
+               [label "Select All"]
+               [enabled (if (equal? selection-type 'single) #f #t)] ; Enable or disable the Select All button depending on global style
+               [parent bottom-left-panel]
+               [callback selectall-button-callback]))
+         
+         (cancel-button
+          (new button%
+               [label "Cancel"]
+               [parent bottom-right-panel]
+               [callback cancel-button-callback]))
+         
+         (ok-button
+          (new button%
+               [label "OK"]
+               [parent bottom-right-panel]
+               [callback ok-button-callback])))
+    (begin
+      (populate-listbox# new-listbox headers initial-listbox-contents)
+      (send dialog show #t)
+      current-selected-contents)))
+
+; Unit test
+;(listbox-dialog# "Some Title"
+;                 "Please select stuff:"
+;  (list "Field" "Value")
+;  (list (list "Naice" "Sweet")
+;  (list "Dude" "Naice"))
+;  'multiple 480 640)
+
 
 
 ; EOF
