@@ -72,6 +72,7 @@ A collection of useful procedures divided into modules for Racket.
          get-filenames                 ; (get-filenames filenames-w-ext)
          get-file-name                 ; (get-file-name path)
          get-last-path-part            ; (get-last-path-part path)
+         list->file                    ; (list->file l file)
          make-backup-file              ; (make-backup-file path)
          maybe-copy-file               ; (maybe-copy-file source destination error-message exists-ok?)
          move-or-die                   ; (move-or-die src dest)
