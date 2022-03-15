@@ -48,6 +48,7 @@
          swap-columns-to-rows-vector     ; (swap-columns-to-rows-vector v)
          all-but-last                    ; (all-but-last l)
          filter-zip                      ; (filter-zip pred-lst lst)
+         string->label                   ; (string->label s)
          )
          
 (module+ test
@@ -466,6 +467,14 @@
 ; Test
 (module+ test
   (check-equal? (pad* '((1 2 3) (1 2 3 4 5) (1 2 3) (1 2)) 9) '((1 2 3 9 9) (1 2 3 4 5) (1 2 3 9 9) (1 2 9 9 9))))
+
+;; convert a string so it complies to a label-string's requirements
+;; (200 chars max string)
+(define (string->label s)
+  (~a s #:max-width 200 #:limit-marker "..."))
+(module+ test
+  (check-equal? (string->label "The expense is accounted for when a vendor bill is validated, except in anglo-saxon accounting with perpetual inventory valuation in which case the expense (Cost of Goods Sold account) is recognized at the customer invoice validation.")
+                "The expense is accounted for when a vendor bill is validated, except in anglo-saxon accounting with perpetual inventory valuation in which case the expense (Cost of Goods Sold account) is recognize..."))
 
 ;;; system
 
