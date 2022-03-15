@@ -40,9 +40,19 @@ A collection of useful procedures divided into modules for Racket.
          set-clipboard-text              ; (set-clipboard-text s)
          get-unique-prefix-line          ; (get-unique-prefix-line lst prefix)
          label->filename                 ; (label->filename label ext)
-         transpose                       ; (transpose l)
+         str-list-contains?              ; (str-list-contains? l s)
          execute-async                   ; (execute-async startup-path program-binary-path command-line-parameters)
-         combine-with)                   ; (combine-with f l1 l2)
+         combine-with                    ; (combine-with f l1 l2)
+         pad                             ; (pad l len default)
+         pad*                            ; (pad* l default)
+         first-of-each                   ; (first-of-each l)
+         first-two-of-each               ; (first-two-of-each l)
+         rest-of-each                    ; (rest-of-each l)
+         second-of-each                  ; (second-of-each l)
+         swap-columns-and-rows           ; (swap-columns-and-rows l)
+         swap-columns-to-rows-vector     ; (swap-columns-to-rows-vector v)
+         all-but-last                    ; (all-but-last l)
+         filter-zip)                     ; (filter-zip pred-lst lst)
 </pre>
 
 ## IO procedures
