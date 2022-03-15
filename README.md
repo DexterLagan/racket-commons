@@ -36,7 +36,7 @@ A collection of libraries for Racket.
          take-everything-after-including ; (take-everything-after-including l starts-with)
          get-clipboard-text              ; (get-clipboard-text)
          set-clipboard-text              ; (set-clipboard-text s)
-         combine-with)              ; (combine-with f l1 l2)
+         combine-with)                   ; (combine-with f l1 l2)
 </pre>
 
 ## IO Contents
