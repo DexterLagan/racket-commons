@@ -64,7 +64,7 @@ A collection of libraries for Racket.
          make-backup-file              ; (make-backup-file path)
          move-or-die                   ; (move-or-die src dest)
          path!                         ; (path! path-or-string)
-         path<?                        ; (path<? p1 p2)
+         path\<?                        ; (path<? p1 p2)
          process-text-files            ; (process-text-files process file-list)
          replace-filename-in-path      ; (replace-filename-in-path full-path new-filename)
          run-if-not-exists             ; (run-if-not-exists list-of-files operation)
