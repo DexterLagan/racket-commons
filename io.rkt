@@ -352,18 +352,20 @@
       (if (>= (length l) 2)
           (if (second l) #t #f)
           #f) #f))
-; Test
-(check-equal? (second? '(1)) #f)
-(check-equal? (second? '(1 2)) #t)
-(check-equal? (second? '(1 2 3)) #t)
+; unit test
+(module+ test
+  (check-equal? (second? '(1)) #f)
+  (check-equal? (second? '(1 2)) #t)
+  (check-equal? (second? '(1 2 3)) #t))
 
 ; Predicate that returns true if the second element of the list is '#true (and nothing else!)
 (define (second-true? l)
   (if (second? l)
       (if (equal? (second l) #t) #t #f)
       #f))
-; Test
-(check-equal? (second-true? '(1 anything)) #f)
-(check-equal? (second-true? '(1 #t)) #t)
+; unit test
+(module+ test
+  (check-equal? (second-true? '(1 anything)) #f)
+  (check-equal? (second-true? '(1 #t)) #t))
 
 ; EOF
