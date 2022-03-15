@@ -140,6 +140,12 @@ A collection of libraries for Racket.
          hash->flat-sorted-string-list ; (hash->flat-sorted-string-list h))
 </pre>
 
+## CSV-import Contents
+
+<pre>
+(provide import-csv) ; (import-csv file processor-func (delimiter #\,))
+</pre>
+
 ## XML Contents
 
 <pre>
