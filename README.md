@@ -130,6 +130,15 @@ A collection of libraries for Racket.
          help-about)
 </pre>
 
+## Hash Contents
+
+<pre>
+
+(provide hash->string-list             ; (hash->string-list h)
+         hash->sorted-string-list      ; (hash->sorted-string-list h)
+         hash->flat-sorted-string-list ; (hash->flat-sorted-string-list h))
+</pre>
+
 ## XML Contents
 
 <pre>
