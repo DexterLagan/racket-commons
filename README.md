@@ -144,6 +144,8 @@ A collection of libraries for Racket.
 
 ## CSV-import Contents
 
+See csv-import-example.rkt for a sample implementation of the following module.
+
 <pre>
 (provide import-csv) ; (import-csv file processor-func (delimiter #\,))
 </pre>
