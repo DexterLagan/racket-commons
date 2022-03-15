@@ -91,5 +91,5 @@ A collection of libraries for Racket.
          show-warning-message)       ; (show-warning-message message)
 </pre>
 
-# License
-
+## License
+Racket Commons is free software; see [LICENSE](https://github.com/DexterLagan/racket-commons/blob/main/LICENSE) for more details.
