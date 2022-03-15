@@ -3,7 +3,6 @@
 (provide chop                       ; (chop l n)
          echo                       ; (echo ... ... ...)
          define-command-line-params ; (define-command-line-params appname param1 ...)
-         
          list-to-string-lines       ; (list-to-string-lines l)
          string-nth                 ; (string-nth str nth [sep #px"\\s+"])
          mask                       ; (mask l1 l2)
