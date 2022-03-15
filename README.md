@@ -185,6 +185,13 @@ This is intended to be a good copy-paste candidate when one needs a simple, stan
          hash->flat-sorted-string-list ; (hash->flat-sorted-string-list h))
 </pre>
 
+## Clipboard procedures
+
+<pre>
+(provide get-clipboard       ; (get-clipboard-text)
+         set-clipboard-text) ; (set-clipboard-text s)
+</pre>
+
 ## CSV-import procedures
 
 See csv-import-example.rkt for a sample implementation of the following module.
