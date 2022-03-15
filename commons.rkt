@@ -35,7 +35,6 @@
          get-unique-prefix-line          ; (get-unique-prefix-line lst prefix)
          label->filename                 ; (label->filename label ext)
          str-list-contains?              ; (str-list-contains? l s)
-         execute-async                   ; (execute-async startup-path program-binary-path command-line-parameters)
          combine-with                    ; (combine-with f l1 l2)
          pad                             ; (pad l len default)
          pad*                            ; (pad* l default)
@@ -337,7 +336,7 @@
 ; unit test
 (module+ test
   (check-equal? (combine-with string-append '("a" "b" "c") '("d" "e" "f")) '("ad" "be" "cf")))
- 
+
 ;; returns all the lines, including the one starting with, drop the rest
 (define (take-everything-until-including l starts-with)
   (dropf-right l (λ (s) (not (string-prefix? s starts-with)))))
@@ -499,21 +498,6 @@
 (define (string-replace2 s from1 to1 from2 to2)
   (string-replace (string-replace s from1 to1) from2 to2))
 
-;;; system
-
-;; launches a program in a cross-platform way
-(define (execute-async startup-path program-binary-path command-line-parameters)
-  (if (and (non-empty-string? startup-path)
-           (non-empty-string? program-binary-path)
-           (file-exists? program-binary-path))
-      (if (equal? (system-type 'os) 'windows)
-          (shell-execute #f
-                         program-binary-path
-                         command-line-parameters
-                         startup-path
-                         'sw_shownormal) ; possible values: 'sw_shownormal 'sw_hide 'sw_minimize
-          (process program-binary-path))
-      (show-error-message "This program is not installed.")))
 
 
 ; EOF
