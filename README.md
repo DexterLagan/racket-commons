@@ -71,3 +71,25 @@ A collection of libraries for Racket.
          sort-paths                    ; (sort-paths paths)
          write-file-lines)             ; (write-file-lines lines path)
 </pre>
+
+## Dialogs Contents
+
+<pre>
+(provide die                         ; (die msg)
+         get-directory-list          ; (get-directory-list title msg path)
+         get-directory-list-w-prefix ; (get-directory-list-w-prefix title msg path folder_prefix)
+         get-single-directory        ; (get-single-directory title msg path)
+         hide-loading                ; (hide-loading)
+         listbox-dialog              ; (listbox-dialog title message initial-listbox-contents style)
+         listbox-selectall           ; (listbox-selectall list-box item-count select?)
+         my-get-file-list            ; (my-get-file-list message path filetype_name filetype_pattern)
+         msgbox                      ; (msgbox appname message)
+         populate-listbox            ; (populate-listbox listbox listbox-contents)
+         show-error-message          ; (show-error-message message)
+         show-loading                ; (show-loading)
+         show-confirmation-dialog    ; (show-confirmation-dialog appname message)
+         show-warning-message)       ; (show-warning-message message)
+</pre>
+
+# License
+
