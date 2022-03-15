@@ -37,8 +37,19 @@
          label->filename                 ; (label->filename label ext)
          str-list-contains?              ; (str-list-contains? l s)
          execute-async                   ; (execute-async startup-path program-binary-path command-line-parameters)
-         combine-with)                   ; (combine-with f l1 l2)
-
+         combine-with                    ; (combine-with f l1 l2)
+         pad                             ; (pad l len default)
+         pad*                            ; (pad* l default)
+         first-of-each                   ; (first-of-each l)
+         first-two-of-each               ; (first-two-of-each l)
+         rest-of-each                    ; (rest-of-each l)
+         second-of-each                  ; (second-of-each l)
+         swap-columns-and-rows           ; (swap-columns-and-rows l)
+         swap-columns-to-rows-vector     ; (swap-columns-to-rows-vector v)
+         all-but-last                    ; (all-but-last l)
+         filter-zip                      ; (filter-zip pred-lst lst)
+         )
+         
 (module+ test
   (require rackunit))
 
@@ -390,6 +401,71 @@
 (module+ test
   (check-true (str-list-contains? '("a" "b" "c") "b"))
   (check-false (str-list-contains? '("a" "b" "c") "e")))
+
+(define (first-of-each l) ; -> list of atoms!
+  (if (null? (car l)) null; make sure there is a first
+      (map car l)))
+;(first-of-each '((1 2 3) (a b c) ("str1" "str2" "str3")))
+;'(1 a "str1")
+
+(define (first-two-of-each l) ; -> list of lists
+  (cond [(null? (caar l)) null] ; if the first item of the first list if there
+        [(null? (second (car l))) null]; if the second item of the first list
+        [else (let ((first-two (lambda (l) (list (car l) (second l)))))
+                (map first-two l))]))
+;(first-two-of-each '((1 2 3) (a b c) ("str1" "str2" "str3")))
+;'((1 2) (a b) ("str1" "str2"))
+
+(define (rest-of-each l) ; -> list of lists!
+  (if (null? (car l)) null
+      (map cdr l)))
+;(rest-of-each '((1 2 3) (a b c) ("str1" "str2" "str3")))
+;'((2 3) (b c) ("str2" "str3"))
+
+(define (second-of-each l) ; -> list of atoms!
+  (first-of-each
+   (rest-of-each l)))
+;(second-of-each '((1 2 3) (a b c) ("str1" "str2" "str3")))
+;'(2 b "str2")
+
+(define (each-of-each l) ; a.k.a. swap columns and rows
+  (if (null? (car (cdr l))) null
+        (cons (first-of-each l) (each-of-each (rest-of-each l)))))
+;(each-of-each '((1 2 3) (a b c) ("str1" "str2" "str3")))
+;'((1 a "str1") (2 b "str2") (3 c "str3"))
+
+; Better version of each-of-each
+(define (swap-columns-and-rows l)
+  (apply map list l))
+
+; Same as swap-columns-and-rows but works with vectors
+(define (swap-columns-to-rows-vector v)
+  (apply vector-map vector (vector->list v)))
+
+; Filters a list by another list of booleans
+(define (filter-zip pred-list list)
+  (if (null? list) null
+      (let ((bool (car pred-list))
+            (elem (car list)))
+        (if bool (cons elem (filter-zip (cdr pred-list) (cdr list)))
+            (filter-zip (cdr pred-list) (cdr list))))))
+
+; Pad a list with default. Returns list if length is same or inferior to the list's
+(define (pad l len default)
+  (if (< (- len (length l)) 1) l
+      (append l (make-list (- len (length l)) default))))
+; Test
+(module+ test
+  (check-equal? (pad '(1 2 3 4) 6 0) '(1 2 3 4 0 0)))
+
+; Automatically pad each list of a list to the longest list using default as padding (can be "", 0, null or anything)
+(define (pad* l default)
+  (let* ((lengths (map length l))
+         (max-length (apply max lengths)))
+    (map (curryr pad max-length default) l)))
+; Test
+(module+ test
+  (check-equal? (pad* '((1 2 3) (1 2 3 4 5) (1 2 3) (1 2)) 9) '((1 2 3 9 9) (1 2 3 4 5) (1 2 3 9 9) (1 2 9 9 9))))
 
 ;;; system
 
