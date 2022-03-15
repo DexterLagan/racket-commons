@@ -1,26 +1,28 @@
 #lang racket/gui
 (require mrlib/path-dialog)
 (provide die                         ; (die msg)
+         die#                        ; (die# msg)
          get-directory-list          ; (get-directory-list title msg path)
          get-directory-list-w-prefix ; (get-directory-list-w-prefix title msg path folder_prefix)
          get-single-directory        ; (get-single-directory title msg path)
+         get-string-or-die           ; (get-string-or-die msg error)
          hide-loading                ; (hide-loading)
          listbox-dialog              ; (listbox-dialog title message initial-listbox-contents style)
          listbox-dialog#             ; (listbox-dialog# title message headers initial-listbox-contents selection-type width height)
          listbox-selectall           ; (listbox-selectall list-box item-count select?)
          my-get-file-list            ; (my-get-file-list message path filetype_name filetype_pattern)
-         msgbox                      ; (msgbox appname message)
+         msgbox                      ; (msgbox message)
          populate-listbox            ; (populate-listbox listbox listbox-contents)
          show-error-message          ; (show-error-message message)
          show-loading                ; (show-loading)
-         show-confirmation-dialog    ; (show-confirmation-dialog appname message)
+         show-confirmation-dialog    ; (show-confirmation-dialog message)
          show-warning-message)       ; (show-warning-message message)
 (module+ test
   (require rackunit))
 
 ;;; purpose
 
-; a library of useful dialogs
+; a library of useful dialogs and interactive message boxes
 
 ;;; version history
 
@@ -28,20 +30,39 @@
 
 ;;; defs
 
-;; Generic MsgBox with App name as title
-(define (msgbox appname message)
-  (message-box appname message #f (list 'ok 'no-icon)))
+;; displays a text message box
+(define msgbox
+  (λ args
+    (void (message-box *appname*
+                       (string-append (apply ~a args) "   ")
+                       #f
+                       (list 'ok)))))
 
-;; a generic die dialog that quits
-(define (die msg)
-  (void (message-box "Fatal Error" msg #f (list 'ok 'stop)))
-  (exit 1))
+;; displays an error message before quitting
+(define die
+  (λ args
+    (show-error-message (apply ~a args))
+    (exit 1)))
 
-;; Generic confirmation dialog
-(define (show-confirmation-dialog appname message)
-  (if (equal? (message-box appname message #f (list 'yes-no 'caution)) 'yes)
-      #t
-      #f))
+;; command line version of die
+(define die#
+  (λ args
+    (displayln (apply ~a args))
+    (exit 1)))
+
+;; show a confirmation dialog. Returns true if user confirmed, false otherwise
+(define show-confirmation-dialog
+  (λ args
+    (eq? (message-box *appname* (apply ~a args) #f (list 'yes-no))
+         'yes)))
+
+;; ask user to enter a string, quit with the given error message if none provided
+(define (get-string-or-die msg error)
+  (define input
+    (get-text-from-user *appname* msg))
+  (unless (non-empty-string? input)
+    (die error))
+  (string-trim input))
 
 ;; a generic loading dialog
 (define loading-dialog
@@ -68,13 +89,18 @@
 (define (hide-loading)
   (send loading-dialog show #f))
 
-; Generic warning message dialog
-(define (show-warning-message message)
-  (void (message-box "Warning" message #f (list 'ok 'caution))))
-
-; Generic error message dialog
-(define (show-error-message message)
-  (void (message-box "Error" message #f (list 'ok 'stop))))
+;; Generic warning message dialog
+(define show-warning-message
+  (λ args
+    (void (message-box "Warning"
+                       (string-append (apply ~a args) "   ")
+                       #f
+                       (list 'ok 'caution)))))
+                       
+;; displays an error dialog
+(define show-error-message
+  (λ args
+    (message-box *appname* (apply ~a args) #f '(ok stop))))
 
 ; Ask user to select a list of scenes - could be used to obtain scene list.
 ; Example: (getfilelist "Please select a list of scenes." "C:\\" "Harmony Scene" "scene-*")
