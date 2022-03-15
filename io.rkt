@@ -33,6 +33,8 @@
          process-text-files            ; (process-text-files process file-list)
          replace-filename-in-path      ; (replace-filename-in-path full-path new-filename)
          run-if-not-exists             ; (run-if-not-exists list-of-files operation)
+         second?                       ; (second? l)
+         second-true?                  ; (second-true? l)
          sort-paths                    ; (sort-paths paths)
          write-file-lines)             ; (write-file-lines lines path)
 (module+ test
@@ -343,5 +345,25 @@
 ;; write a list to file as is
 (define (list->file l file)
   (write-to-file l file #:exists 'replace #:mode 'text))
+
+; Predicate that returns true if the list has a second element
+(define (second? l)
+  (if (list? l)
+      (if (>= (length l) 2)
+          (if (second l) #t #f)
+          #f) #f))
+; Test
+(check-equal? (second? '(1)) #f)
+(check-equal? (second? '(1 2)) #t)
+(check-equal? (second? '(1 2 3)) #t)
+
+; Predicate that returns true if the second element of the list is '#true (and nothing else!)
+(define (second-true? l)
+  (if (second? l)
+      (if (equal? (second l) #t) #t #f)
+      #f))
+; Test
+(check-equal? (second-true? '(1 anything)) #f)
+(check-equal? (second-true? '(1 #t)) #t)
 
 ; EOF
