@@ -476,6 +476,10 @@
   (check-equal? (string->label "The expense is accounted for when a vendor bill is validated, except in anglo-saxon accounting with perpetual inventory valuation in which case the expense (Cost of Goods Sold account) is recognized at the customer invoice validation.")
                 "The expense is accounted for when a vendor bill is validated, except in anglo-saxon accounting with perpetual inventory valuation in which case the expense (Cost of Goods Sold account) is recognize..."))
 
+;; all but last
+(define (all-but-last l)
+  (reverse (cdr (reverse l))))
+
 ;;; system
 
 ;; launches a program in a cross-platform way
