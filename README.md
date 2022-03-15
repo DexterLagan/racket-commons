@@ -206,5 +206,11 @@ See csv-import-example.rkt for a sample implementation of the following module.
 (provide get-xml-value-from-id) ; (get-xml-value-from-id file pattern)
 </pre>
 
+## System procedures
+
+<pre>
+(provide execute-async) ; (execute-async startup-path program-binary-path command-line-parameters)
+</pre>
+
 ## License
 Racket Commons is free software; see [LICENSE](https://github.com/DexterLagan/racket-commons/blob/main/LICENSE) for more details.
