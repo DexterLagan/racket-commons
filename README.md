@@ -40,6 +40,7 @@ A collection of libraries for Racket.
          set-clipboard-text              ; (set-clipboard-text s)
          get-unique-prefix-line          ; (get-unique-prefix-line lst prefix)
          label->filename                 ; (label->filename label ext)
+         transpose                       ; (transpose l)
          execute-async                   ; (execute-async startup-path program-binary-path command-line-parameters)
          combine-with)                   ; (combine-with f l1 l2)
 </pre>
