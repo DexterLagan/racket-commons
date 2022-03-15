@@ -2,15 +2,15 @@
 (require db)
 (require srfi/19)
 (require db/util/datetime)
-(require "../common/commons.rkt")
+(require "commons.rkt")
 (provide query-execute                                 ; (query-execute db query)
          query-record                                  ; (query-record db query)
-         query-value                                   ; (query-value db query)
          query-string                                  ; (query-string db query)
          get-query-headers                             ; (get-query-headers query)    ('AS' required)
          get-query-headers#                            ; (get-query-headers# query)    ('AS' not required, ignores subqueries)
          get-query-headers*                            ; (get-query-headers* db query)      ('AS' not required, but does not support complex sub-queries)
          get-query-results                             ; (get-query-results db query wildcard-list)
+         list->file                                    ; (list->file l file)
          ml->sl                                        ; (ml->sl l)
          sql-ml->sl                                    ; (sql-ml->sl l)
          get-tables                                    ; (get-tables db)
@@ -61,6 +61,10 @@
 ;(query-list pgc "select n from the_numbers where n > $1 and n < $2" 0 3)
 
 ;;; defs
+
+;; write a list to file as is
+(define (list->file l file)
+  (write-to-file l file #:exists 'replace #:mode 'text))
 
 ; Returns a list of list of tables that contain the specified column
 (define (get-tables-that-contain-each-column-in-query db db-schema query)
@@ -120,6 +124,28 @@
         (if (member column columns) #t #f)) #f))
 ; Test
 ;(table-contains? db "produit" "produit_num")
+
+; Predicate that returns true if the list has a second element
+(define (second? l)
+  (if (list? l)
+      (if (>= (length l) 2)
+          (if (second l) #t #f)
+          #f) #f))
+; unit test
+(module+ test
+  (check-equal? (second? '(1)) #f)
+  (check-equal? (second? '(1 2)) #t)
+  (check-equal? (second? '(1 2 3)) #t))
+
+; Predicate that returns true if the second element of the list is '#true (and nothing else!)
+(define (second-true? l)
+  (if (second? l)
+      (if (equal? (second l) #t) #t #f)
+      #f))
+; unit test
+(module+ test
+  (check-equal? (second-true? '(1 anything)) #f)
+  (check-equal? (second-true? '(1 #t)) #t))
 
 ; Returns a list of tables which contain the given column name
 (define (which-tables-contain? db tables column)
@@ -291,13 +317,10 @@
   (and (non-empty-string? query)
        (query-rows db query)))
 
-;; executes an SQL query and returns the value, returns #f if zero row returned
-(define (query-value db query)
+;; executes an SQL query and returns the string value, returns #f if zero row returned
+(define (query-string db query)
   (and (non-empty-string? query)
        (query-maybe-value db query)))
-
-;; alias for query-value: executes an SQL query and returns the value, returns #f if zero row returned
-(define query-string query-value)
 
 
 ; EOF
