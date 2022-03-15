@@ -15,6 +15,7 @@
          grep                            ; (grep lines regex-pattern)
          grepl                           ; (grep lines prefix)
          string-replace-list             ; (string-replace-list source pattern-list destination)
+         string-replace2                 ; (string-replace2 s from1 to1 from2 to2)
          multi-replace-line              ; (multi-replace-line line source-list destination)
          multi-replace-lines             ; (multi-replace-lines lines source-list destination)
          license-expired?                ; (license-expired? license-year)
@@ -31,8 +32,6 @@
          take-everything-until-including ; (take-everything-until-including l starts-with)
          take-everything-starts-with     ; (take-everything-starts-with l prefix)
          take-everything-after-including ; (take-everything-after-including l starts-with)
-         get-clipboard-text              ; (get-clipboard-text)
-         set-clipboard-text              ; (set-clipboard-text s)
          get-unique-prefix-line          ; (get-unique-prefix-line lst prefix)
          label->filename                 ; (label->filename label ext)
          str-list-contains?              ; (str-list-contains? l s)
@@ -49,6 +48,8 @@
          all-but-last                    ; (all-but-last l)
          filter-zip                      ; (filter-zip pred-lst lst)
          string->label                   ; (string->label s)
+         second?                         ; (second? l)
+         second-true?                    ; (second-true? l)
          transpose)                      ; (transpose l)
          
 (module+ test
@@ -336,15 +337,7 @@
 ; unit test
 (module+ test
   (check-equal? (combine-with string-append '("a" "b" "c") '("d" "e" "f")) '("ad" "be" "cf")))
-
-; returns the contents of the cliboard as text
-(define (get-clipboard-text)
-  (send the-clipboard get-clipboard-string 0))
-
-; set the contents of the cliboard as text
-(define (set-clipboard-text s)
-  (send the-clipboard set-clipboard-string s 0))
-  
+ 
 ;; returns all the lines, including the one starting with, drop the rest
 (define (take-everything-until-including l starts-with)
   (dropf-right l (λ (s) (not (string-prefix? s starts-with)))))
@@ -479,6 +472,32 @@
 ;; all but last
 (define (all-but-last l)
   (reverse (cdr (reverse l))))
+
+; Predicate that returns true if the list has a second element
+(define (second? l)
+  (if (list? l)
+      (if (>= (length l) 2)
+          (if (second l) #t #f)
+          #f) #f))
+; unit test
+(module+ test
+  (check-equal? (second? '(1)) #f)
+  (check-equal? (second? '(1 2)) #t)
+  (check-equal? (second? '(1 2 3)) #t))
+
+; Predicate that returns true if the second element of the list is '#true (and nothing else!)
+(define (second-true? l)
+  (if (second? l)
+      (if (equal? (second l) #t) #t #f)
+      #f))
+; unit test
+(module+ test
+  (check-equal? (second-true? '(1 anything)) #f)
+  (check-equal? (second-true? '(1 #t)) #t))
+
+; Replace two strings, not just one
+(define (string-replace2 s from1 to1 from2 to2)
+  (string-replace (string-replace s from1 to1) from2 to2))
 
 ;;; system
 
