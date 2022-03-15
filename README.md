@@ -17,6 +17,8 @@ A collection of libraries for Racket.
          currym                          ; ((currym func param1 param3) param2) (func param1 param2 param3)
          curry-ref                       ; (curry-ref id params ref)
          get-matching-seconds            ; (get-matching-seconds lst key)
+         grep                            ; (grep lines regex-pattern)
+         grepl                           ; (grep lines prefix)
          string-replace-list             ; (string-replace-list source pattern-list destination)
          multi-replace-line              ; (multi-replace-line line source-list destination)
          multi-replace-lines             ; (multi-replace-lines lines source-list destination)
@@ -36,6 +38,9 @@ A collection of libraries for Racket.
          take-everything-after-including ; (take-everything-after-including l starts-with)
          get-clipboard-text              ; (get-clipboard-text)
          set-clipboard-text              ; (set-clipboard-text s)
+         get-unique-prefix-line          ; (get-unique-prefix-line lst prefix)
+         label->filename                 ; (label->filename label ext)
+         execute-async                   ; (execute-async startup-path program-binary-path command-line-parameters)
          combine-with)                   ; (combine-with f l1 l2)
 </pre>
 
