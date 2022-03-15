@@ -2,7 +2,7 @@
 
 A collection of libraries for Racket.
 
-## Commons Contents
+## Commons procedures
 
 <pre>
 (provide chop                            ; (chop l n)
@@ -45,7 +45,7 @@ A collection of libraries for Racket.
          combine-with)                   ; (combine-with f l1 l2)
 </pre>
 
-## IO Contents
+## IO procedures
 
 <pre>
 (provide add-file-extension            ; (add-file-extension filename extension)
@@ -84,7 +84,7 @@ A collection of libraries for Racket.
          write-file-lines)             ; (write-file-lines lines path)
 </pre>
 
-## Dialogs Contents
+## Dialogs procedures
 
 <pre>
 (provide die                         ; (die msg)
@@ -106,7 +106,7 @@ A collection of libraries for Racket.
          show-warning-message)       ; (show-warning-message message)
 </pre>
 
-## GUI Contents
+## GUI procedures
 
 <pre>
 (provide get-bitmap               ; (get-bitmap filename width height)
@@ -114,7 +114,7 @@ A collection of libraries for Racket.
          make-elastic-frame)      ; (make-elastic-frame appname)
 </pre>
 
-## Menu-bar Contents
+## Menu-bar procedures
 
 <pre>
 (provide menu-bar
@@ -133,7 +133,7 @@ A collection of libraries for Racket.
          help-about)
 </pre>
 
-## Hash Contents
+## Hash procedures
 
 <pre>
 
@@ -142,7 +142,7 @@ A collection of libraries for Racket.
          hash->flat-sorted-string-list ; (hash->flat-sorted-string-list h))
 </pre>
 
-## CSV-import Contents
+## CSV-import procedures
 
 See csv-import-example.rkt for a sample implementation of the following module.
 
@@ -150,7 +150,7 @@ See csv-import-example.rkt for a sample implementation of the following module.
 (provide import-csv) ; (import-csv file processor-func (delimiter #\,))
 </pre>
 
-## XML Contents
+## XML procedures
 
 <pre>
 (provide get-xml-value-from-id) ; (get-xml-value-from-id file pattern)
