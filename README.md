@@ -98,7 +98,8 @@ A collection of useful procedures divided into modules for Racket.
 ## Dialogs procedures
 
 <pre>
-(provide die                         ; (die msg)
+(provide centered-listbox-dialog     ; (centered-listbox-dialog title message initial-listbox-contents style width-ratio height-ratio)
+         die                         ; (die msg)
          die#                        ; (die# msg)
          get-directory-list          ; (get-directory-list title msg path)
          get-directory-list-w-prefix ; (get-directory-list-w-prefix title msg path folder_prefix)
