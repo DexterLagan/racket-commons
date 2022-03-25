@@ -54,6 +54,7 @@ A collection of useful procedures divided into modules for Racket.
          string->label                   ; (string->label s)
          second?                         ; (second? l)
          second-true?                    ; (second-true? l)
+         non-empty-list-of-strings?      ; (non-empty-list-of-strings? l)
          transpose)                      ; (transpose l)
 </pre>
 
