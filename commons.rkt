@@ -49,6 +49,7 @@
          string->label                   ; (string->label s)
          second?                         ; (second? l)
          second-true?                    ; (second-true? l)
+         non-empty-list-of-strings?      ; (non-empty-list-of-strings? l)
          transpose)                      ; (transpose l)
          
 (module+ test
@@ -498,6 +499,20 @@
 (define (string-replace2 s from1 to1 from2 to2)
   (string-replace (string-replace s from1 to1) from2 to2))
 
+;; returns true if l is a non-empty list of strings, #f otherwise
+(define (non-empty-list-of-strings? l)
+  (and (non-empty-list? l)
+       (andmap non-empty-string? l)))
+; unit test
+(module+ test
+  (check-false (non-empty-list-of-strings? '("")))
+  (check-false (non-empty-list-of-strings? '("abc" "")))
+  (check-false (non-empty-list-of-strings? '("" "abc")))
+  (check-false (non-empty-list-of-strings? '(1 2 3)))
+  (check-false (non-empty-list-of-strings? '("abc" #f)))
+  (check-false (non-empty-list-of-strings? '("abc" "def" #f "abc")))
+  (check-false (non-empty-list-of-strings? '("abc" 12 "cde")))
+  (check-true  (non-empty-list-of-strings? '("abc" "def" "ghf"))))
 
 
 ; EOF
