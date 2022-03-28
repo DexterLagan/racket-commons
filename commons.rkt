@@ -1,6 +1,7 @@
 #lang racket
 (require racket/date)
-(provide chop                            ; (chop l n)
+(provide chop                            ; (chop l len)
+         string-chop                     ; (string-chop s len)
          echo                            ; (echo ... ... ...)
          define-command-line-params      ; (define-command-line-params appname param1 ...)
          list-to-string-lines            ; (list-to-string-lines l)
@@ -514,5 +515,16 @@
   (check-false (non-empty-list-of-strings? '("abc" 12 "cde")))
   (check-true  (non-empty-list-of-strings? '("abc" "def" "ghf"))))
 
+;; chops a string at the desired length
+(define (string-chop s len)
+  (and (non-empty-string? s)
+       (if (> (string-length s) len)
+           (substring s 0 len)
+           s)))
+;unit test
+(module+ test
+  (check-equal? (string-chop "12345" 3) "123")
+  (check-equal? (string-chop "123" 5) "123")
+  (check-equal? (string-chop 12345 3) #f))
 
 ; EOF
