@@ -5,7 +5,8 @@ A collection of useful procedures divided into modules for Racket.
 ## Commons procedures
 
 <pre>
-(provide chop                            ; (chop l n)
+(provide chop                            ; (chop l len)
+         string-chop                     ; (string-chop s len)
          echo                            ; (echo ... ... ...)
          define-command-line-params      ; (define-command-line-params appname param1 ...)
          list-to-string-lines            ; (list-to-string-lines l)
