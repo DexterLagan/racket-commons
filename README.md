@@ -2,6 +2,12 @@
 
 A collection of useful procedures divided into modules for Racket.
 
+## Version history
+
+v1.0.2 - added string-chop.
+v1.0.1 - added non-empty-list-of-strings?.
+v1.0 - initial release.
+
 ## Commons procedures
 
 <pre>
