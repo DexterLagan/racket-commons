@@ -4,6 +4,7 @@ A collection of useful procedures divided into modules for Racket.
 
 ## Version history
 
+- v1.0.3 - added remove-non-alphanumeric-or-underscore.
 - v1.0.2 - added string-chop.
 - v1.0.1 - added non-empty-list-of-strings?.
 - v1.0 - initial release.
@@ -62,6 +63,7 @@ A collection of useful procedures divided into modules for Racket.
          second?                         ; (second? l)
          second-true?                    ; (second-true? l)
          non-empty-list-of-strings?      ; (non-empty-list-of-strings? l)
+         remove-non-alphanumeric-or-underscore ; (remove-non-alphanumeric-or-underscore s)
          transpose)                      ; (transpose l)
 </pre>
 
