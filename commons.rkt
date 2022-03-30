@@ -51,6 +51,7 @@
          second?                         ; (second? l)
          second-true?                    ; (second-true? l)
          non-empty-list-of-strings?      ; (non-empty-list-of-strings? l)
+         remove-non-alphanumeric-or-underscore ; (remove-non-alphanumeric-or-underscore s)
          transpose)                      ; (transpose l)
          
 (module+ test
@@ -526,5 +527,15 @@
   (check-equal? (string-chop "12345" 3) "123")
   (check-equal? (string-chop "123" 5) "123")
   (check-equal? (string-chop 12345 3) #f))
+
+;; returns a string with non-alphanumeric characters removed, leaves underscores alone
+(define (remove-non-alphanumeric-or-underscore s)
+  (define (alphanum? c)
+    (or (char-numeric? c)
+        (char-alphabetic? c)
+        (eq? c #\_)))
+  (list->string (filter alphanum? (string->list s))))
+(module+ test
+  (check-equal? (remove-non-alphanumeric-or-underscore "a0 9-14_*&(") "a0914_"))
 
 ; EOF
