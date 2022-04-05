@@ -50,6 +50,7 @@
          string->label                   ; (string->label s)
          second?                         ; (second? l)
          second-true?                    ; (second-true? l)
+         non-empty-list-of-list?         ; (non-empty-list-of-list? l)
          non-empty-list-of-strings?      ; (non-empty-list-of-strings? l)
          remove-non-alphanumeric-or-underscore ; (remove-non-alphanumeric-or-underscore s)
          transpose)                      ; (transpose l)
@@ -500,6 +501,23 @@
 ; Replace two strings, not just one
 (define (string-replace2 s from1 to1 from2 to2)
   (string-replace (string-replace s from1 to1) from2 to2))
+
+;; returns true if l is a non-empty list of list, #f otherwise
+(define (non-empty-list-of-list? l)
+  (and (non-empty-list? l)
+       (non-empty-list? (car l))))
+; unit test
+(module+ test
+  (check-false (non-empty-list-of-list? '("" "")))
+  (check-false (non-empty-list-of-list? '("abc" "")))
+  (check-false (non-empty-list-of-list? '("" "abc")))
+  (check-false (non-empty-list-of-list? '(1 2 3)))
+  (check-false (non-empty-list-of-list? '("abc" #f)))
+  (check-false (non-empty-list-of-list? '("abc" '("test") #f "abc")))
+  (check-false (non-empty-list-of-list? '("abc" 12 "cde")))
+  (check-true  (non-empty-list-of-list? '(("test"))))
+  (check-true  (non-empty-list-of-list? '(("test" "test2"))))
+  (check-true  (non-empty-list-of-list? '(("test" "test2") ("test3" "test4")))))
 
 ;; returns true if l is a non-empty list of strings, #f otherwise
 (define (non-empty-list-of-strings? l)
