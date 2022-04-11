@@ -53,6 +53,8 @@
          non-empty-list-of-list?         ; (non-empty-list-of-list? l)
          non-empty-list-of-strings?      ; (non-empty-list-of-strings? l)
          remove-non-alphanumeric-or-underscore ; (remove-non-alphanumeric-or-underscore s)
+         take-up-to                      ; (take-up-to n lst)
+         group                           ; (group n lst)
          transpose)                      ; (transpose l)
          
 (module+ test
@@ -555,5 +557,50 @@
   (list->string (filter alphanum? (string->list s))))
 (module+ test
   (check-equal? (remove-non-alphanumeric-or-underscore "a0 9-14_*&(") "a0914_"))
+
+;; returns a string with non-alphanumeric characters removed, leaves underscores alone
+(define (remove-non-alphanumeric-or-underscore s)
+  (define (alphanum? c)
+    (or (char-numeric? c)
+        (char-alphabetic? c)
+        (eq? c #\_)))
+  (list->string (filter alphanum? (string->list s))))
+(module+ test
+  (check-equal? (remove-non-alphanumeric-or-underscore "a0 9-14_*&(") "a0914_"))
+
+;; returns a list of up to n items off the given list lst
+(define (take-up-to n lst)
+  (if (or (zero? n) (null? lst))
+      '()
+      (cons (car lst) (take-up-to (- n 1) (cdr lst)))))
+(module+ test
+  (check-equal? (take-up-to 0 '("a" "b" "c")) '())
+  (check-equal? (take-up-to 2 '("a" "b" "c")) '("a" "b"))
+  (check-equal? (take-up-to 1 '("a" "b" "c")) '("a"))
+  (check-equal? (take-up-to 4 '("a" "b" "c")) '("a" "b" "c")))
+
+;; split/group a list into n equal chunks
+(define (group n lst)
+  (define (loop grouped lst l)
+    (cond
+      [(empty? lst)
+       (reverse grouped)]
+      [(<= l n)
+       (loop (cons lst grouped) '() 0)]
+      [else (let-values ([(taken dropped) (split-at lst n)])
+              (loop (cons taken grouped)
+                    dropped
+                    (- l n)))]))
+  (let ([l (length lst)])
+    (if (>= n l)
+        (list lst)
+        (loop '() lst l))))
+; unit test
+(module+ test
+  (check-equal? (group 3 '(1 2 3)) '((1 2 3)))
+  (check-equal? (group 3 '("sweet" "naice" "cool" "extra")) '(("sweet" "naice" "cool") ("extra")))
+  (check-equal? (group 2 '("sweet" "naice" "cool" "extra")) '(("sweet" "naice") ("cool" "extra"))))
+
+
 
 ; EOF
