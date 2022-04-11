@@ -65,6 +65,8 @@ A collection of useful procedures divided into modules for Racket.
          non-empty-list-of-list?         ; (non-empty-list-of-list? l)
          non-empty-list-of-strings?      ; (non-empty-list-of-strings? l)
          remove-non-alphanumeric-or-underscore ; (remove-non-alphanumeric-or-underscore s)
+         take-up-to                      ; (take-up-to n lst)
+         group                           ; (group n lst)
          transpose)                      ; (transpose l)
 </pre>
 
