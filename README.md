@@ -4,6 +4,7 @@ A collection of useful procedures divided into modules for Racket.
 
 ## Version history
 
+- v1.0.4 - added take-up-to and group (cuts a list into chunks).
 - v1.0.3 - added remove-non-alphanumeric-or-underscore.
 - v1.0.2 - added string-chop.
 - v1.0.1 - added non-empty-list-of-strings?.
