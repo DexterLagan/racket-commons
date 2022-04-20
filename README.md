@@ -4,6 +4,7 @@ A collection of useful procedures divided into modules for Racket.
 
 ## Version history
 
+- v1.0.6 - added strip-newlines-returns.
 - v1.0.5 - added string-replace3.
 - v1.0.5 - added auto-quote.
 - v1.0.4 - added take-up-to and group (cuts a list into chunks).
@@ -72,6 +73,7 @@ A collection of useful procedures divided into modules for Racket.
          take-up-to                      ; (take-up-to n lst)
          group                           ; (group n lst)
          auto-quote                      ; (auto-quote str)
+         strip-newlines-returns          ; (strip-newlines-returns str)
          transpose)                      ; (transpose l)
 </pre>
 
