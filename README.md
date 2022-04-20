@@ -4,6 +4,7 @@ A collection of useful procedures divided into modules for Racket.
 
 ## Version history
 
+- v1.0.5 - added auto-quote.
 - v1.0.4 - added take-up-to and group (cuts a list into chunks).
 - v1.0.3 - added remove-non-alphanumeric-or-underscore.
 - v1.0.2 - added string-chop.
@@ -68,6 +69,7 @@ A collection of useful procedures divided into modules for Racket.
          remove-non-alphanumeric-or-underscore ; (remove-non-alphanumeric-or-underscore s)
          take-up-to                      ; (take-up-to n lst)
          group                           ; (group n lst)
+         auto-quote                      ; (auto-quote str)
          transpose)                      ; (transpose l)
 </pre>
 
