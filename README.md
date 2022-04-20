@@ -4,6 +4,7 @@ A collection of useful procedures divided into modules for Racket.
 
 ## Version history
 
+- v1.0.5 - added string-replace3.
 - v1.0.5 - added auto-quote.
 - v1.0.4 - added take-up-to and group (cuts a list into chunks).
 - v1.0.3 - added remove-non-alphanumeric-or-underscore.
@@ -31,6 +32,7 @@ A collection of useful procedures divided into modules for Racket.
          grepl                           ; (grep lines prefix)
          string-replace-list             ; (string-replace-list source pattern-list destination)
          string-replace2                 ; (string-replace2 s from1 to1 from2 to2)
+         string-replace3                 ; (string-replace2 s from1 to1 from2 to2 from3 to3)
          multi-replace-line              ; (multi-replace-line line source-list destination)
          multi-replace-lines             ; (multi-replace-lines lines source-list destination)
          license-expired?                ; (license-expired? license-year)
