@@ -57,6 +57,7 @@
          take-up-to                      ; (take-up-to n lst)
          group                           ; (group n lst)
          auto-quote                      ; (auto-quote str)
+         strip-newlines-returns          ; (strip-newlines-returns str)
          transpose)                      ; (transpose l)
          
 (module+ test
@@ -620,6 +621,11 @@
   (check-equal? (auto-quote "there is a comma and \"double-quotes\" in this string, I should double-quote it")
                 "\"there is a comma and \"\"double-quotes\"\" in this string, I should double-quote it\""))
 
-
+;; strips both newlines and line feeds
+(define (strip-newlines-returns str)
+  (string-replace2 str
+                   "\n" ""
+                   "\r" ""))
+                   
 
 ; EOF
