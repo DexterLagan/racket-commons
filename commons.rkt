@@ -55,6 +55,7 @@
          remove-non-alphanumeric-or-underscore ; (remove-non-alphanumeric-or-underscore s)
          take-up-to                      ; (take-up-to n lst)
          group                           ; (group n lst)
+         auto-quote                      ; (auto-quote str)
          transpose)                      ; (transpose l)
          
 (module+ test
@@ -600,6 +601,19 @@
   (check-equal? (group 3 '(1 2 3)) '((1 2 3)))
   (check-equal? (group 3 '("sweet" "naice" "cool" "extra")) '(("sweet" "naice" "cool") ("extra")))
   (check-equal? (group 2 '("sweet" "naice" "cool" "extra")) '(("sweet" "naice") ("cool" "extra"))))
+
+;; utility function double-quotes a string if it contains a comma, and doubles double-quotes
+(define (auto-quote str)
+  (if (string-contains? str ",")
+      (string-append "\"" (string-replace str "\"" "\"\"") "\"")
+      (string-replace str "\"" "\"\"")))
+; unit test
+(module+ test
+  (check-equal? (auto-quote "no quotes!") "no quotes!")
+  (check-equal? (auto-quote "there is a comma in this string, I should quote it")
+                "\"there is a comma in this string, I should quote it\"")
+  (check-equal? (auto-quote "there is a comma and \"double-quotes\" in this string, I should double-quote it")
+                "\"there is a comma and \"\"double-quotes\"\" in this string, I should double-quote it\""))
 
 
 
