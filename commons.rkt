@@ -17,6 +17,7 @@
          grepl                           ; (grep lines prefix)
          string-replace-list             ; (string-replace-list source pattern-list destination)
          string-replace2                 ; (string-replace2 s from1 to1 from2 to2)
+         string-replace3                 ; (string-replace3 s from1 to1 from2 to2 from3 to3)
          multi-replace-line              ; (multi-replace-line line source-list destination)
          multi-replace-lines             ; (multi-replace-lines lines source-list destination)
          license-expired?                ; (license-expired? license-year)
@@ -504,6 +505,10 @@
 ; Replace two strings, not just one
 (define (string-replace2 s from1 to1 from2 to2)
   (string-replace (string-replace s from1 to1) from2 to2))
+  
+; Replace three strings, not just two
+(define (string-replace3 s from1 to1 from2 to2 from3 to3)
+  (string-replace (string-replace (string-replace s from1 to1) from2 to2) from3 to3))
 
 ;; returns true if l is a non-empty list of list, #f otherwise
 (define (non-empty-list-of-list? l)
