@@ -36,6 +36,7 @@
          take-everything-after-including ; (take-everything-after-including l starts-with)
          get-unique-prefix-line          ; (get-unique-prefix-line lst prefix)
          label->filename                 ; (label->filename label ext)
+         str-list-contains               ; (str-list-contains l s)
          str-list-contains?              ; (str-list-contains? l s)
          combine-with                    ; (combine-with f l1 l2)
          pad                             ; (pad l len default)
@@ -403,6 +404,24 @@
 (module+ test
   (check-true (str-list-contains? '("a" "b" "c") "b"))
   (check-false (str-list-contains? '("a" "b" "c") "e")))
+
+;; searches a string in a list. Returns the string if found, #f otherwise
+;; same as previous procedure, but returns the line containing the needle instead
+(define (str-list-contains l s)
+  (define results
+    (filter-map (λ (str)
+                  (if (string-contains? str s)
+                      str
+                      #f))
+                l))
+  (if (non-empty-list? results)
+      (first results)
+      #f))
+; unit test
+(module+ test
+  (check-equal? (str-list-contains '("a" "b" "c") "b") "b")
+  (check-equal? (str-list-contains '("a" "b" "c") "e") #f)
+  (check-equal? (str-list-contains '("sweet" "cool stuff" "naice") "cool") "cool stuff"))
 
 (define (first-of-each l) ; -> list of atoms!
   (if (null? (car l)) null; make sure there is a first
