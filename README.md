@@ -4,6 +4,7 @@ A collection of useful procedures divided into modules for Racket.
 
 ## Version history
 
+- v1.0.8 - added string-contains-one-of?.
 - v1.0.7 - added str-list-contains.
 - v1.0.6 - added strip-newlines-returns.
 - v1.0.5 - added string-replace3.
@@ -55,6 +56,7 @@ A collection of useful procedures divided into modules for Racket.
          label->filename                 ; (label->filename label ext)
          str-list-contains               ; (str-list-contains l s)
          str-list-contains?              ; (str-list-contains? l s)
+         string-contains-one-of?         ; (string-contains-one-of? s l)
          combine-with                    ; (combine-with f l1 l2)
          pad                             ; (pad l len default)
          pad*                            ; (pad* l default)
