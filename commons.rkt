@@ -38,6 +38,7 @@
          label->filename                 ; (label->filename label ext)
          str-list-contains               ; (str-list-contains l s)
          str-list-contains?              ; (str-list-contains? l s)
+         string-contains-one-of?         ; (string-contains-one-of? s l)
          combine-with                    ; (combine-with f l1 l2)
          pad                             ; (pad l len default)
          pad*                            ; (pad* l default)
@@ -422,6 +423,18 @@
   (check-equal? (str-list-contains '("a" "b" "c") "b") "b")
   (check-equal? (str-list-contains '("a" "b" "c") "e") #f)
   (check-equal? (str-list-contains '("sweet" "cool stuff" "naice") "cool") "cool stuff"))
+
+;; returns #t if the string contains one of the listed strings, #f otherwise
+(define (string-contains-one-of? s l)
+  (and (non-empty-list? l)
+       (ormap (λ (str)
+                (string-contains? s str))
+              l)))
+; unit test
+(module+ test
+  (check-true (string-contains-one-of? "b" '("a" "b" "c")))
+  (check-false (string-contains-one-of? "e" '("a" "b" "c")))
+  (check-true (string-contains-one-of? "souris usb" '("batterie" "adaptateur" "clé" "clavier" "dalle" "souris" "encadrement" "capot" "haut parleur" "carte pci"))))
 
 (define (first-of-each l) ; -> list of atoms!
   (if (null? (car l)) null; make sure there is a first
