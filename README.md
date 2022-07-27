@@ -4,6 +4,7 @@ A collection of useful procedures divided into modules for Racket.
 
 ## Version history
 
+- v1.0.9 - added dies.
 - v1.0.8 - added string-contains-one-of?.
 - v1.0.7 - added str-list-contains.
 - v1.0.6 - added strip-newlines-returns.
@@ -21,6 +22,7 @@ A collection of useful procedures divided into modules for Racket.
 (provide chop                            ; (chop l len)
          string-chop                     ; (string-chop s len)
          echo                            ; (echo ... ... ...)
+         dies                            ; (dies ... ... ...)
          define-command-line-params      ; (define-command-line-params appname param1 ...)
          list-to-string-lines            ; (list-to-string-lines l)
          string-nth                      ; (string-nth str nth [sep #px"\\s+"])
