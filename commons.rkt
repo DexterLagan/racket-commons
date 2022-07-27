@@ -3,6 +3,7 @@
 (provide chop                            ; (chop l len)
          string-chop                     ; (string-chop s len)
          echo                            ; (echo ... ... ...)
+         dies                            ; (dies ... ... ...)
          define-command-line-params      ; (define-command-line-params appname param1 ...)
          list-to-string-lines            ; (list-to-string-lines l)
          string-nth                      ; (string-nth str nth [sep #px"\\s+"])
@@ -257,6 +258,12 @@
 (define echo
   (lambda args
     (displayln (apply ~a args))))
+    
+;; displays an error message and quit with an error code
+(define dies
+  (lambda args
+    (displayln (apply ~a args))
+    (exit 1)))
 
 ;; General list printing
 (define (print-list l)
