@@ -61,6 +61,7 @@
          group                           ; (group n lst)
          auto-quote                      ; (auto-quote str)
          strip-newlines-returns          ; (strip-newlines-returns str)
+         string->list-of-numbers         ; (string->list-of-numbers str)
          transpose)                      ; (transpose l)
          
 (module+ test
@@ -667,4 +668,30 @@
                    "\r" ""))
                    
 
+;; returns a list of numbers, given a string containing a list of numbers
+;; returns #f otherwise
+(define (string->list-of-numbers str)
+  (let/cc return
+    ((comp_ (string-split _ ",")
+            (if (or (null? _)
+                    (< (length _) 2))
+                (return #f)
+                (map string-trim _))
+            (map string->number _)
+            (if (andmap number? _)
+                _
+                #f))
+     str)))
+; unit test
+(module+ test
+  (check-equal? (string->list-of-numbers "0,2") '(0 2))
+  (check-equal? (string->list-of-numbers "1, 2, 3") '(1 2 3))
+  (check-equal? (string->list-of-numbers "1,") #f)
+  (check-equal? (string->list-of-numbers ",2") #f)
+  (check-equal? (string->list-of-numbers "hello") #f)
+  (check-equal? (string->list-of-numbers "a,b") #f)
+  (check-equal? (string->list-of-numbers "1,a") #f)
+  (check-equal? (string->list-of-numbers "b,2") #f))
+  
+  
 ; EOF
