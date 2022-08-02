@@ -4,17 +4,18 @@ A collection of useful procedures divided into modules for Racket.
 
 ## Version history
 
-- v1.0.9 - added dies.
-- v1.0.8 - added string-contains-one-of?.
-- v1.0.7 - added str-list-contains.
-- v1.0.6 - added strip-newlines-returns.
-- v1.0.5 - added string-replace3.
-- v1.0.5 - added auto-quote.
-- v1.0.4 - added take-up-to and group (cuts a list into chunks).
-- v1.0.3 - added remove-non-alphanumeric-or-underscore.
-- v1.0.2 - added string-chop.
-- v1.0.1 - added non-empty-list-of-strings?.
-- v1.0 - initial release.
+- v1.0.10 - added string->list-of-numbers.
+- v1.0.9  - added dies.
+- v1.0.8  - added string-contains-one-of?.
+- v1.0.7  - added str-list-contains.
+- v1.0.6  - added strip-newlines-returns.
+- v1.0.5  - added string-replace3.
+- v1.0.5  - added auto-quote.
+- v1.0.4  - added take-up-to and group (cuts a list into chunks).
+- v1.0.3  - added remove-non-alphanumeric-or-underscore.
+- v1.0.2  - added string-chop.
+- v1.0.1  - added non-empty-list-of-strings?.
+- v1.0    - initial release.
 
 ## Commons procedures
 
@@ -80,6 +81,7 @@ A collection of useful procedures divided into modules for Racket.
          group                           ; (group n lst)
          auto-quote                      ; (auto-quote str)
          strip-newlines-returns          ; (strip-newlines-returns str)
+         string->list-of-numbers         ; (string->list-of-numbers str)
          transpose)                      ; (transpose l)
 </pre>
 
