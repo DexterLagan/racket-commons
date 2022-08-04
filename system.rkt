@@ -1,6 +1,6 @@
 #lang racket/gui
-(provide execute-async) ; (execute-async startup-path program-binary-path command-line-parameters)
-
+(provide execute-async  ; (execute-async startup-path program-binary-path command-line-parameters)
+         system->ports) ; (system->ports command)
 ;;; defs
 
 ;; launches a program in a cross-platform way
@@ -17,5 +17,17 @@
           (process program-binary-path))
       (show-error-message "This program is not installed.")))
 
+;; redirect output and error ports to string, returning both as values
+(define (system->ports command)
+  (let ((out (open-output-string))
+        (err (open-output-string)))
+    (parameterize ((current-output-port out)
+                   (current-error-port err))
+      (system command)
+      (values (get-output-string out)
+              (get-output-string err)))))
+; unit test
+;(define-values (output err)
+;  (system->ports "notepad.exe"))
 
 ; EOF
