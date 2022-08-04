@@ -4,6 +4,7 @@ A collection of useful procedures divided into modules for Racket.
 
 ## Version history
 
+- v1.0.11 - added system->ports.
 - v1.0.10 - added string->list-of-numbers.
 - v1.0.9  - added dies.
 - v1.0.8  - added string-contains-one-of?.
@@ -237,7 +238,8 @@ See csv-import-example.rkt for a sample implementation of the following module.
 ## System procedures
 
 <pre>
-(provide execute-async) ; (execute-async startup-path program-binary-path command-line-parameters)
+(provide execute-async  ; (execute-async startup-path program-binary-path command-line-parameters)
+         system->ports) ; (system->ports command)
 </pre>
 
 ## License
