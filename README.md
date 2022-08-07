@@ -4,6 +4,7 @@ A collection of useful procedures divided into modules for Racket.
 
 ## Version history
 
+- v1.0.12 - added remove-indexed-items.
 - v1.0.11 - added system->ports.
 - v1.0.10 - added string->list-of-numbers.
 - v1.0.9  - added dies.
@@ -83,6 +84,7 @@ A collection of useful procedures divided into modules for Racket.
          auto-quote                      ; (auto-quote str)
          strip-newlines-returns          ; (strip-newlines-returns str)
          string->list-of-numbers         ; (string->list-of-numbers str)
+         remove-indexed-items            ; (remove-indexed-items items indexes)
          transpose)                      ; (transpose l)
 </pre>
 
