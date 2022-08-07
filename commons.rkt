@@ -62,6 +62,7 @@
          auto-quote                      ; (auto-quote str)
          strip-newlines-returns          ; (strip-newlines-returns str)
          string->list-of-numbers         ; (string->list-of-numbers str)
+         remove-indexed-items            ; (remove-indexed-items items indexes)
          transpose)                      ; (transpose l)
          
 (module+ test
@@ -693,5 +694,16 @@
   (check-equal? (string->list-of-numbers "1,a") #f)
   (check-equal? (string->list-of-numbers "b,2") #f))
   
-  
+;; removes items from a list which are matching the given indexes
+(define (remove-indexed-items items indexes)
+  (filter (λ (item)
+            (not (member (index-of items item)
+                         indexes)))
+          items))
+; unit test
+(module+ test
+  (check-equal? (remove-indexed-items '(1 2 3 4) '(0 1)) '(3 4))
+  (check-equal? (remove-indexed-items '("001" "002" "003" "004") '(1 3)) '("001" "003")))  
+
+
 ; EOF
