@@ -398,12 +398,28 @@
   (filter (λ (line) (string-prefix? line prefix)) lines))
 
 ;; transpose a list of lists
+;; returns the transposed list of lists if lists are equal lengths, #f otherwise
 (define (transpose l)
-  (apply map list l))
+  (let/cc return
+    (unless (and (non-empty-list? l)
+                 (non-empty-list? (first l)))
+      (return #f))
+    ; consider first list as the length to match
+    (define standard-length
+      (length (first l)))
+    (if (andmap (λ (line)
+                  (equal? (length line) standard-length))
+                l)
+        (apply map list l)
+        #f)))
 ; unit test
 (module+ test
-  (check-equal? (apply map list '((1 2 3) (4 5 6)))
-                '((1 4) (2 5) (3 6))))
+  (check-equal? (transpose '((1 2 3) (4 5 6)))
+                '((1 4) (2 5) (3 6)))
+  (check-equal? (transpose '((1 2 3) (4 5 6 7)))
+                #f)
+  (check-equal? (transpose '("hello" (4 5 6 7)))
+                #f))
 
 ;; searches a string in a list. Returns #t if found, #f otherwise
 (define (str-list-contains? l s)
