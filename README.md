@@ -216,7 +216,8 @@ This is intended to be a good copy-paste candidate when one needs a simple, stan
 
 (provide hash->string-list             ; (hash->string-list h)
          hash->sorted-string-list      ; (hash->sorted-string-list h)
-         hash->flat-sorted-string-list ; (hash->flat-sorted-string-list h))
+         hash->flat-sorted-string-list ; (hash->flat-sorted-string-list h)
+         maybe-hash)                   ; (maybe-hash cond possible-hash)
 </pre>
 
 ## Clipboard procedures
