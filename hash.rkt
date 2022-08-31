@@ -5,7 +5,8 @@
 
 (provide hash->string-list             ; (hash->string-list h)
          hash->sorted-string-list      ; (hash->sorted-string-list h)
-         hash->flat-sorted-string-list ; (hash->flat-sorted-string-list h))
+         hash->flat-sorted-string-list ; (hash->flat-sorted-string-list h)
+         maybe-hash)                   ; (maybe-hash cond possible-hash)
          
 (module+ test
   (require rackunit))
@@ -15,6 +16,11 @@
 ; to provide several useful hash functions.
   
 ;;; defs
+
+;; used along hash-union can conditionally and funcitonally build a hash bit by bit
+(define (maybe-hash cond possible-hash)
+  (and (hash? possible-hash)
+    (if cond possible-hash (hash))))
 
 ;; converts a hash table to a list of list of strings
 (define (hash->string-list h)
