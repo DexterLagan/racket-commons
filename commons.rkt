@@ -23,6 +23,7 @@
          multi-replace-lines             ; (multi-replace-lines lines source-list destination)
          license-expired?                ; (license-expired? license-year)
          license-almost-expired?         ; (license-almost-expired? license-month)
+         list!                           ; (list! v)
          print-list                      ; (print-list l)
          list-of-one?                    ; (list-of-one? l)
          ++                              ; (++ ... ... ...)
@@ -99,6 +100,11 @@
                            *log-file*
                            #:separator "\r\n"
                            #:exists 'append)))
+
+;; forces any value as a list
+(define (list! v)
+  (if (list? v) v
+      (list v)))
 
 ;; replace a filename in a full path with another filename
 (define (replace-filename-in-path full-path new-filename)
