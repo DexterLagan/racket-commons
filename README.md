@@ -4,6 +4,7 @@ A collection of useful procedures divided into modules for Racket.
 
 ## Version history
 
+- v1.0.14 - added list! and maybe-hash
 - v1.0.13 - updated transpose and improved unit test coverage.
 - v1.0.12 - added remove-indexed-items.
 - v1.0.11 - added system->ports.
@@ -46,6 +47,7 @@ A collection of useful procedures divided into modules for Racket.
          multi-replace-lines             ; (multi-replace-lines lines source-list destination)
          license-expired?                ; (license-expired? license-year)
          license-almost-expired?         ; (license-almost-expired? license-month)
+         list!                           ; (list! v)
          print-list                      ; (print-list l)
          list-of-one?                    ; (list-of-one? l)
          ++                              ; (++ ... ... ...)
