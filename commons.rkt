@@ -64,6 +64,7 @@
          strip-newlines-returns          ; (strip-newlines-returns str)
          string->list-of-numbers         ; (string->list-of-numbers str)
          remove-indexed-items            ; (remove-indexed-items items indexes)
+         media-file?                     ; (media-file? f)
          transpose)                      ; (transpose l)
          
 (module+ test
@@ -726,6 +727,30 @@
 (module+ test
   (check-equal? (remove-indexed-items '(1 2 3 4) '(0 1)) '(3 4))
   (check-equal? (remove-indexed-items '("001" "002" "003" "004") '(1 3)) '("001" "003")))  
+
+;; matches media files, returns #t otherwise.
+;; to be used in combination with find-files
+(define (media-file? f)
+  (let/cc return
+    ; ignore directories
+    (unless (file-exists? f)
+      (return #f))
+    ; get extension
+    (define ext
+      (path-get-extension f))
+    ; match media file extensions
+    (or (eq? ext #".tga")
+        (eq? ext #".png")
+        (eq? ext #".sgi")
+        (eq? ext #".exr")
+        (eq? ext #".mov")
+        (eq? ext #".jpg")
+        (eq? ext #".jpeg")
+        (eq? ext #".psd")
+        (eq? ext #".psb")
+        (eq? ext #".gif")
+        (eq? ext #".mp4")
+        (eq? ext #".avi"))))
 
 
 ; EOF
