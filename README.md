@@ -4,6 +4,7 @@ A collection of useful procedures divided into modules for Racket.
 
 ## Version history
 
+- v1.0.16 - added non-empty-list-of-numbers?
 - v1.0.15 - added media-file?.
 - v1.0.14 - added list! and maybe-hash
 - v1.0.13 - updated transpose and improved unit test coverage.
@@ -90,6 +91,7 @@ A collection of useful procedures divided into modules for Racket.
          string->list-of-numbers         ; (string->list-of-numbers str)
          remove-indexed-items            ; (remove-indexed-items items indexes)
          media-file?                     ; (media-file?)
+         non-empty-list-of-numbers?      ; (non-empty-list-of-numbers? l)
          transpose)                      ; (transpose l)
 </pre>
 
