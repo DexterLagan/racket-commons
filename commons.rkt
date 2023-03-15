@@ -65,6 +65,7 @@
          string->list-of-numbers         ; (string->list-of-numbers str)
          remove-indexed-items            ; (remove-indexed-items items indexes)
          media-file?                     ; (media-file? f)
+         non-empty-list-of-numbers?      ; (non-empty-list-of-numbers? l)
          transpose)                      ; (transpose l)
          
 (module+ test
@@ -607,6 +608,18 @@
   (check-false (non-empty-list-of-strings? '("abc" 12 "cde")))
   (check-true  (non-empty-list-of-strings? '("abc" "def" "ghf"))))
 
+;; returns #t if a list of numbers, #f otherwise
+(define (non-empty-list-of-numbers? l)
+  (and (list? l)
+       (not (empty? l))
+       (andmap number? l)))
+; unit test
+(module+ test
+  (check-false (non-empty-list-of-numbers? #f))
+  (check-false (non-empty-list-of-numbers? '()))
+  (check-true  (non-empty-list-of-numbers? '(1 2)))
+  (check-false (non-empty-list-of-numbers? '("a" "b" "c"))))
+  
 ;; chops a string at the desired length
 (define (string-chop s len)
   (and (non-empty-string? s)
