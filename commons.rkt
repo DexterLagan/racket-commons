@@ -66,6 +66,7 @@
          remove-indexed-items            ; (remove-indexed-items items indexes)
          media-file?                     ; (media-file? f)
          non-empty-list-of-numbers?      ; (non-empty-list-of-numbers? l)
+         get-latest-version-number       ; (get-latest-version-number versions prefix)
          transpose)                      ; (transpose l)
          
 (module+ test
@@ -764,6 +765,41 @@
         (eq? ext #".gif")
         (eq? ext #".mp4")
         (eq? ext #".avi"))))
+
+;; determines the last version number, given a list of versions and the expected prefix
+;; sample version list: '("SOMEPREFIX_SOMETHING_V1" "SOMEPREFIX_SOMETHING_V2" "SOMEPREFIX_SOMETHING_V3" "OTHERPREFIX_SOMETHINGELSE_V1")
+;; sample prefix: "SOMEPREFIX_SOMETHING_V"
+(define/contract (get-latest-version-number versions prefix)
+  (non-empty-list? string? . -> . number?)
+  (let/cc return
+    ; if stump not found in the list of versions, return 0
+    (unless (str-list-contains? versions prefix)
+      (return 0))
+    ; grab only the version names containing the target stump
+    (define target-versions
+      (filter (curryr string-contains? prefix)
+              versions))
+    ; remove stump from object-version-names
+    (define version-number-strings?
+      (map (curryr string-replace prefix "")
+           target-versions))
+    ; convert to a list of numbers
+    (define version-numbers?
+      (if (non-empty-list-of-strings? version-number-strings?)
+          (map string->number version-number-strings?)
+          '(0)))
+    ; sort list of resulting numbers
+    (if (non-empty-list-of-numbers? version-numbers?)
+        (car (sort version-numbers? >))
+        0)))
+; unit test
+(module+ test
+  (check-equal? (get-latest-version-number '("GOODSTUMP_V1" "GOODSTUMP_V2" "GOODSTUMP_V3" "BADSTUMP_V1") "GOODSTUMP_V")
+                3)
+  (check-equal? (get-latest-version-number '("GOODSTUMP_V1" "GOODSTUMP_V2" "GOODSTUMP_V3" "BADSTUMP_V1") "BADSTUMP_V")
+                1)
+  (check-equal? (get-latest-version-number '("GOODSTUMP_V1" "GOODSTUMP_V2" "GOODSTUMP_V3" "BADSTUMP_V1") "OTHERSTUMP_V")
+                0))
 
 
 ; EOF
