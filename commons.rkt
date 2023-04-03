@@ -67,6 +67,7 @@
          media-file?                     ; (media-file? f)
          non-empty-list-of-numbers?      ; (non-empty-list-of-numbers? l)
          get-latest-version-number       ; (get-latest-version-number versions prefix)
+         non-empty-or-none-string?       ; (non-empty-or-none-string? s)
          transpose)                      ; (transpose l)
          
 (module+ test
@@ -84,6 +85,16 @@
 ;       write-log and the if-defined macro
 
 ;;; defs
+
+;; helper function returns #t if given string isn't empty or "None"
+  (define (non-empty-or-none-string? s)
+    (and (non-empty-string? s)
+         (not (string=? s "None"))))
+; unit test
+(module+ test
+  (check-false (non-empty-or-none-string? ""))
+  (check-false (non-empty-or-none-string? "None"))
+  (check-true  (non-empty-or-none-string? "Something")))
 
 ;; macro executes the second form if symbol is defined, the third if not
 ;; i.e. (if-defined some-symbol (display "defined") (display "not defined"))
