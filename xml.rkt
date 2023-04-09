@@ -15,15 +15,15 @@
 ;; returns the username given the contents of a localprefs.xml file
 ;; <string value="usabatch" id="LAST_LOGIN_NAME"/>
 ;; sample use:
-;; (get-xml-value-from-id "C:\\Users\\dexters\\AppData\\Roaming\\Toon Boom Animation\\localpref.xml" "LAST_LOGIN_NAME")
+;; (get-xml-value-from-id "C:\\Users\\user\\Desktop\\test.xml" "SOME_XML_VALUE")
 (define (get-xml-value-from-id file pattern)
   ; read file to lines
   (define prefs-lines
     (file->lines file))
-  ; helper func to find login line
+  ; helper func to find value line
   (define (login line)
     (string-contains? line pattern))
-  ; helper func to extract login alone
+  ; helper func to extract value alone
   (define (clean line)
     (define parts (string-split line "\""))
     (second parts))
