@@ -68,6 +68,7 @@
          non-empty-list-of-numbers?      ; (non-empty-list-of-numbers? l)
          get-latest-version-number       ; (get-latest-version-number versions prefix)
          non-empty-or-none-string?       ; (non-empty-or-none-string? s)
+         get-current-executable-path     ; (get-current-executable-path)
          transpose)                      ; (transpose l)
          
 (module+ test
@@ -77,14 +78,12 @@
 
 ; a library of common useful functions
 
-;;; version history
-
-; 1.0 - initial release for other projects
-; 1.1 - added chop, list-of-one?, get-matching-seconds
-; 1.2 - added string-nth, mask, mask-not and replace-filename-in-path,
-;       write-log and the if-defined macro
-
 ;;; defs
+
+;; returns the current executable's path
+;; sample result: C:\Users\baxter\OneDrive\Documents\Projects\Racket\Common\superlative.exe
+(define (get-current-executable-path)
+  (find-system-path 'run-file))
 
 ;; helper function returns #t if given string isn't empty or "None"
   (define (non-empty-or-none-string? s)
