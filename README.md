@@ -4,6 +4,7 @@ A collection of useful procedures divided into modules for Racket.
 
 ## Version history
 
+- v1.0.19 - added get-current-executable-path
 - v1.0.18 - added non-empty-or-none-string?
 - v1.0.17 - added get-latest-version-number
 - v1.0.16 - added non-empty-list-of-numbers?
@@ -96,6 +97,7 @@ A collection of useful procedures divided into modules for Racket.
          non-empty-list-of-numbers?      ; (non-empty-list-of-numbers? l)
          get-latest-version-number       ; (get-latest-version-number versions prefix)
          non-empty-or-none-string?       ; (non-empty-or-none-string? s)
+         get-current-executable-path     ; (get-current-executable-path)
          transpose)                      ; (transpose l)
 </pre>
 
