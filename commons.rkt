@@ -782,8 +782,11 @@
 ;; sample version list: '("SOMEPREFIX_SOMETHING_V1" "SOMEPREFIX_SOMETHING_V2" "SOMEPREFIX_SOMETHING_V3" "OTHERPREFIX_SOMETHINGELSE_V1")
 ;; sample prefix: "SOMEPREFIX_SOMETHING_V"
 (define/contract (get-latest-version-number versions prefix)
-  (non-empty-list? string? . -> . number?)
+  (list? string? . -> . number?)
   (let/cc return
+    ; if empty list, return 0
+    (unless (non-empty-list? versions)
+      (return 0))
     ; if stump not found in the list of versions, return 0
     (unless (str-list-contains? versions prefix)
       (return 0))
@@ -806,6 +809,8 @@
         0)))
 ; unit test
 (module+ test
+  (check-equal? (get-latest-version-number '() "GOODSTUMP_V")
+                0)
   (check-equal? (get-latest-version-number '("GOODSTUMP_V1" "GOODSTUMP_V2" "GOODSTUMP_V3" "BADSTUMP_V1") "GOODSTUMP_V")
                 3)
   (check-equal? (get-latest-version-number '("GOODSTUMP_V1" "GOODSTUMP_V2" "GOODSTUMP_V3" "BADSTUMP_V1") "BADSTUMP_V")
