@@ -4,6 +4,7 @@ A collection of useful procedures divided into modules for Racket.
 
 ## Version history
 
+- v1.0.21 - updated get-latest-version
 - v1.0.20 - sorted provide in common module
 - v1.0.19 - added get-current-executable-path
 - v1.0.18 - added non-empty-or-none-string?
