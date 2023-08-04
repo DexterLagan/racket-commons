@@ -676,27 +676,37 @@
   (check-equal? (take-up-to 1 '("a" "b" "c")) '("a"))
   (check-equal? (take-up-to 4 '("a" "b" "c")) '("a" "b" "c")))
 
-;; split/group a list into n equal chunks
+;; split/group a list into n equal chunks.
+;; returns a list of lists.
 (define (group n lst)
-  (define (loop grouped lst l)
-    (cond
-      [(empty? lst)
-       (reverse grouped)]
-      [(<= l n)
-       (loop (cons lst grouped) '() 0)]
-      [else (let-values ([(taken dropped) (split-at lst n)])
-              (loop (cons taken grouped)
-                    dropped
-                    (- l n)))]))
-  (let ([l (length lst)])
-    (if (>= n l)
-        (list lst)
-        (loop '() lst l))))
+  (let/cc return
+    (when (non-empty-string? n)
+      (set! n (string->number n)))
+    (unless (number? n)
+      (return (list lst)))
+    (define (loop grouped lst l)
+      (cond
+        [(empty? lst)
+         (reverse grouped)]
+        [(<= l n)
+         (loop (cons lst grouped) '() 0)]
+        [else (let-values ([(taken dropped) (split-at lst n)])
+                (loop (cons taken grouped)
+                      dropped
+                      (- l n)))]))
+    (let ([l (length lst)])
+      (if (>= n l) ; ERROR: >=: contract violation
+          ; expected: real?
+          ; given: "8"
+          (list lst)
+          (loop '() lst l)))))
 ; unit test
 (module+ test
   (check-equal? (group 3 '(1 2 3)) '((1 2 3)))
+  (check-equal? (group 'x '(1 2 3)) '((1 2 3)))
   (check-equal? (group 3 '("sweet" "naice" "cool" "extra")) '(("sweet" "naice" "cool") ("extra")))
-  (check-equal? (group 2 '("sweet" "naice" "cool" "extra")) '(("sweet" "naice") ("cool" "extra"))))
+  (check-equal? (group 2 '("sweet" "naice" "cool" "extra")) '(("sweet" "naice") ("cool" "extra")))
+  (check-equal? (group "2" '("sweet" "naice" "cool" "extra")) '(("sweet" "naice") ("cool" "extra"))))
 
 ;; utility function double-quotes a string if it contains a comma, and doubles double-quotes
 (define (auto-quote str)
