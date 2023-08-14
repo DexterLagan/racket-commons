@@ -15,6 +15,7 @@
          first-letter                          ; (first-letter s)
          first-of-each                         ; (first-of-each l)
          first-two-of-each                     ; (first-two-of-each l)
+         formatted-file-size                   ; (formatted-file-size filepath)
          get-current-executable-path           ; (get-current-executable-path)
          get-file-content-type                 ; (get-file-content-type filepath)
          get-latest-version-number             ; (get-latest-version-number versions prefix)
@@ -846,5 +847,14 @@
       (if (non-empty-list? sorted-files)
           (map car sorted-files)
           #f)))
+
+;; helper function returns a string with the correctly formatted file size of the given filepath (i.e. 1,234,567 KB)
+;; function returns "0 KB" if the file does not exist
+(define/contract (formatted-file-size filepath)
+  ((or/c path? path-string?) . -> . non-empty-string?)
+  (if (file-exists? filepath)
+      (string-append (~r (file-size filepath) #:groups '(3) #:group-sep ",") " KB")
+      "0 KB"))
+
 
 ; EOF
