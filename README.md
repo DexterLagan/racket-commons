@@ -4,6 +4,7 @@ A collection of useful procedures divided into modules for Racket.
 
 ## Version history
 
+- v1.0.23 - added sort-filepaths-by-inc-size to common module
 - v1.0.22 - improved group procedure safety in common module
 - v1.0.21 - updated get-latest-version
 - v1.0.20 - sorted provide in common module
