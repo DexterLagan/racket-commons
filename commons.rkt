@@ -52,6 +52,7 @@
          second-of-each                        ; (second-of-each l)
          second-true?                          ; (second-true? l)
          second?                               ; (second? l)
+         sort-filepaths-by-inc-size            ; (sort-filepaths-by-inc-size filepaths)
          str-list-contains                     ; (str-list-contains l s)
          str-list-contains?                    ; (str-list-contains? l s)
          string->label                         ; (string->label s)
@@ -828,5 +829,22 @@
   (check-equal? (get-latest-version-number '("GOODSTUMP_V1" "GOODSTUMP_V2" "GOODSTUMP_V3" "BADSTUMP_V1") "OTHERSTUMP_V")
                 0))
 
+;; helper function returns a list of the given filepaths in increasing order of size
+  (define/contract (sort-filepaths-by-inc-size filepaths)
+    (non-empty-list? . -> . (or/c non-empty-list? boolean?))
+    (let/cc return
+      ; build a sorted list of filepaths by their respective sizes
+      (define sorted-files
+        (let ((file+sizes
+               (map (λ (filepath)
+                      (if (file-exists? filepath)
+                          (list filepath (file-size filepath))
+                          (return #f))) ; return an error if one of the filepaths isn't a file
+                    filepaths)))
+          (sort file+sizes #:key cdr <)))
+      ; deduce a flat list of the filepaths in order of size
+      (if (non-empty-list? sorted-files)
+          (map car sorted-files)
+          #f)))
 
 ; EOF
