@@ -4,6 +4,7 @@ A collection of useful procedures divided into modules for Racket.
 
 ## Version history
 
+- v1.0.24 - added clean-var, inspect macro
 - v1.0.23 - added sort-filepaths-by-inc-size amd formatted-file-size to common module
 - v1.0.22 - improved group procedure safety in common module
 - v1.0.21 - updated get-latest-version
@@ -35,6 +36,7 @@ A collection of useful procedures divided into modules for Racket.
 <pre>
 (provide all-but-last                          ; (all-but-last l)
          auto-quote                            ; (auto-quote str)
+         clean-var-name                        ; (clean-var-name var)
          chop                                  ; (chop l n)
          combine-with                          ; (combine-with f l1 l2)
          comp_                                 ; (comp_ stx) [MACRO]
@@ -58,6 +60,7 @@ A collection of useful procedures divided into modules for Racket.
          grepl                                 ; (grepl lines prefix)
          group                                 ; (group n lst)
          if-defined                            ; (if-defined stx) [MACRO]
+         inspect                               ; (inspect x ...)
          label->filename                       ; (label->filename label ext)
          license-almost-expired?               ; (license-almost-expired? license-month)
          license-expired?                      ; (license-expired? license-year)
