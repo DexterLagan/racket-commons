@@ -2,6 +2,7 @@
 (require racket/date)
 (provide all-but-last                          ; (all-but-last l)
          auto-quote                            ; (auto-quote str)
+         clean-var-name                        ; (clean-var-name var)
          chop                                  ; (chop l n)
          combine-with                          ; (combine-with f l1 l2)
          comp_                                 ; (comp_ stx) [MACRO]
@@ -25,6 +26,7 @@
          grepl                                 ; (grepl lines prefix)
          group                                 ; (group n lst)
          if-defined                            ; (if-defined stx) [MACRO]
+         inspect                               ; (inspect x ...)
          label->filename                       ; (label->filename label ext)
          license-almost-expired?               ; (license-almost-expired? license-month)
          license-expired?                      ; (license-expired? license-year)
@@ -73,7 +75,8 @@
          take-everything-until-including       ; (take-everything-until-including l starts-with)
          take-up-to                            ; (take-up-to n lst)
          transpose                             ; (transpose l)
-         zip)                                  ; (zip l1 l2)
+         ;write-log                             ; (write-log s1 s2 ...)
+         zip)
          
 (module+ test
   (require rackunit))
@@ -82,7 +85,62 @@
 
 ; a library of common useful functions
 
-;;; defs
+;                                            
+;                                            
+;   ;  ;;                                    
+;   ;; ;;                                    
+;   ;; ;;  ;;;;    ;;;;  ;; ;;   ;;;    ;;;; 
+;   ;; ;;     ;   ;;      ;; ;  ;   ;  ;     
+;   ;;; ;   ;;;   ;       ;     ;   ;  ;;;   
+;  ;  ; ;  ;  ;   ;       ;     ;   ;     ;; 
+;  ;  ; ;  ;  ;   ;;      ;     ;   ;      ; 
+;  ;    ;  ;;; ;   ;;;;  ;;;     ;;;   ;;;;  
+;                                            
+;                                            
+;                                            
+
+;; returns a function that composes parameters in order,
+;; using a placeholder _ for passing values between functions.
+(require (for-syntax racket/base))
+(define-syntax (comp_ stx)
+  ; macro to compose functions passing an '_' parameter
+  (syntax-case stx ()
+    ((_ f1 ...)
+     (with-syntax ([x-var (datum->syntax stx '_)])
+       #'(apply compose1 (reverse (list (λ (x-var) f1) ...)))))))
+; unit test
+(module+ test
+  (check-equal? ((comp_ (string-trim _)
+                        (string-downcase _)
+                        (string-replace _ " " "-")
+                        ) "Hello World")
+                "hello-world"))
+
+;; helper function turns variable names into readable formatted string
+;; i.e. *harmony-binary-path* -> "Harmony Binary Path"
+(define (clean-var-name var)
+  ((comp_ (string-replace (symbol->string _) "-" " ")
+          (string-replace _ "*" "")
+          (string-titlecase _))
+   var))
+
+;; macro displays any number of variables and their values
+(define-syntax-rule (inspect x ...)
+  (begin (printf "  ~a: '~a'\n" (clean-var-name 'x) x) ...))
+
+;                              
+;                              
+;   ;;;;            ;;;        
+;   ;  ;;          ;;          
+;   ;   ;   ;;;   ;;;;;   ;;;; 
+;   ;   ;  ;   ;   ;;    ;     
+;   ;   ;  ;;;;;   ;;    ;;;   
+;   ;   ;  ;       ;;       ;; 
+;   ;  ;;  ;       ;;        ; 
+;   ;;;;    ;;;;   ;;    ;;;;  
+;                              
+;                              
+;                              
 
 ;; returns the current executable's path
 ;; sample result: C:\Users\baxter\OneDrive\Documents\Projects\Racket\Common\superlative.exe
